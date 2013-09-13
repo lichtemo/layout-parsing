@@ -37,6 +37,7 @@ exports
 	 syntax
 		<"'"-LEX> (<Qvar-CF> | <Qcon-CF>)		-> <NameQuotation-CF>
 		<"''"-LEX> (<Tyvar-CF> | <Gtycon-CF>)	-> <NameQuotation-CF>
+		<"'"-LEX> <[A-Za-z0-9\_]-LEX> <"'"-LEX> -> <NameQuotation-CF> {reject}
 		
 	
 	syntax

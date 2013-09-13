@@ -6,7 +6,7 @@ module GHC-ExistentialQuantification
 	exports
 		
 		context-free syntax
-			Context Constr -> Constr {cons("ExistentialConstrs")}
+			Context Constr -> Constr {cons("ExistentialConstrs"), avoid}
 			Forall Context? Constr -> Constr {cons("ExistentialConstrs")}
 			
 		context-free priorities
