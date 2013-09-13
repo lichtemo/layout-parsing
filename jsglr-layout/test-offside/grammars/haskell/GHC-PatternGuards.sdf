@@ -8,7 +8,9 @@ exports
 	
 	context-free syntax
 		
-		"|" {Guard ","}+ 			-> Guards {cons("Guards")}
+		GuardSymbol {Guard ","}+			-> Guards {cons("Guards")}
+		
+	context-free syntax
 		
     	Pat "<-" Exp 				-> Guard {cons("PatternGuard")}  
     	"let" Declbinds 			-> Guard {cons("LocalDeclaration")}

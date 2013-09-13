@@ -1,4 +1,8 @@
 module Haskell-List-Comprehensions
+
+imports
+	Haskell-Patterns
+	
 exports
   context-free syntax
     "[" List "]" 	 -> Exp {cons("List")}
@@ -8,8 +12,10 @@ exports
     Exp "," Exp ".." 	 -> List
     Exp ".." Exp 	 -> List
     Exp "," Exp ".." Exp -> List
-    Exp "|" Quals -> List
    
     Lexps "," Exp 	 -> Lexps
     Exp "," Exp   	 -> Lexps
+    
+  context-free syntax
+  	Exp GuardSymbol Quals -> List
      

@@ -31,7 +31,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = true;
+  private final static boolean LOGGING = false;
   
   private static Context normalizeContext = normalize.init();
   private static Context compareContext = CompareAST.init();

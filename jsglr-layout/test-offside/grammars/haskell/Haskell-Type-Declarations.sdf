@@ -1,6 +1,8 @@
 module Haskell-Type-Declarations
 
-imports Haskell-Types
+imports
+	Haskell-Types
+	Haskell-Patterns
 
 exports
   context-free syntax
@@ -13,9 +15,11 @@ exports
     "deriving" "(" ")" 		     	-> Deriving {cons("NoDeriving")}
     "deriving" "(" {Qtycls ","}+ ")" 	-> Deriving {cons("Derive")}
     				     	-> Deriving {cons("NoDeriving")}
+    				     	
   context-free syntax
-    {Constr "|"}+                        -> Constrs
+    {Constr GuardSymbol}+                       -> Constrs
 
+  context-free syntax
     Conid Satype*       -> Constr {cons("ConstrDecl")}
     Sbtype Conop Sbtype -> Constr {cons("InfixConstr")}
 

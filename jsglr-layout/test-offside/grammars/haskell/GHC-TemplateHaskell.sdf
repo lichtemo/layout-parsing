@@ -39,10 +39,12 @@ exports
 		<"''"-LEX> (<Tyvar-CF> | <Gtycon-CF>)	-> <NameQuotation-CF>
 		
 	
-	lexical syntax
+	syntax
 %%	Quasi Quotation
 	
-		"[" VARID "|" QuasiQuoteString "|]" -> QuasiQuote {cons("QuasiQuote"), ignore-layout}
+		"[" <VARID-LEX> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
+	
+	context-free syntax
 		QuasiQuote 		-> Exp
 		
 

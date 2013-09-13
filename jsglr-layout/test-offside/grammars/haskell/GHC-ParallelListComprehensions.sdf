@@ -1,8 +1,17 @@
 module GHC-ParallelListComprehensions
+imports
+	Haskell-Qualifiers
+	Haskell-Patterns
 exports
-  context-free syntax
-  	Quals "|" Quals -> PQuals
-  	PQuals "|" Quals -> PQuals
-  	PQuals -> ParallelQuals {cons("ParallelQuals")}
-  	Exp "|" ParallelQuals -> List
+	
+	context-free syntax
+		Quals GuardSymbol Quals -> PQuals
+  		PQuals GuardSymbol Quals -> PQuals
+  		
+  	context-free syntax
+  	
+  		PQuals -> ParallelQuals {cons("ParallelQuals")}
+  
+  	context-free syntax
+  		Exp GuardSymbol ParallelQuals -> List
     

@@ -37,8 +37,11 @@ exports
     "~" APat -> APat {cons("Irrefutable")}
     
     Qvar "=" Pat -> FPat {cons("PatBind")}
+    
+  lexical syntax
+    "|"	-> GuardSymbol
 
   lexical restrictions
     "~" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
     "-" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
-    "|" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
+    GuardSymbol -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
