@@ -31,7 +31,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = false;
+  private final static boolean LOGGING = true;
   
   private static Context normalizeContext = normalize.init();
   private static Context compareContext = CompareAST.init();
@@ -93,7 +93,9 @@ public class TestFile extends TestCase {
    // file+= "/Crypto/Crypto-4.2.5/WordListTest.hs";
     //file+="Hermes/Hermes-0.0.4/Network/Hermes/Signature.hs";
   //  file += "actor/actor-0.1.1/Chain.hs";
-    file += "alms/alms-0.6.3/src/BasisUtils.hs";
+    //file += "alms/alms-0.6.3/src/BasisUtils.hs";
+   // file+="accelerate-cuda/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/AST.hs";
+    file += "AERN-Net/AERN-Net-0.2.1.1/src/Control/ERNet/Deployment/Local/Channel.hs";
     
     testFile(new File(file), file, "main");
    // testFile(new File(file), file, "main");
@@ -221,13 +223,15 @@ public class TestFile extends TestCase {
       }
 
       result.stackOverflow.t1 = e.getCause() instanceof StackOverflowError;
-      //if (e.getCause() instanceof StackOverflowError)
-       // e.getCause().printStackTrace();
+      if (e.getCause() instanceof StackOverflowError && LOGGING)
+        e.getCause().printStackTrace();
 
       if (!(e.getCause() instanceof org.spoofax.jsglr_orig.shared.SGLRException)
           && !(e.getCause() instanceof StackOverflowError)) {
         result.otherExceptions.t1 = e.getCause().getMessage();
-        // e.getCause().printStackTrace();
+        if (LOGGING) {
+        e.getCause().printStackTrace();
+        }
       }
     } finally {
       result.ambiguities.t1 = oldParser.ambiguities;

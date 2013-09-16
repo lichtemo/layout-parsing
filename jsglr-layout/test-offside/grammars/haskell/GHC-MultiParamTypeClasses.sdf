@@ -11,4 +11,4 @@ exports
 		 
 		 (("(" Qtycls AType+ ")")) 					-> ClassParam
 		 Qtycls ClassParam ClassParam+ 				-> Class {cons("MultiParamClass")}
-		 Qtycls Tyvar Tyvar+ 						-> SimpleClass {cons("MultiParamSimpleClass")}
+		 Qtycls Tyvar Tyvar+ 						-> SimpleClass {cons("MultiParamSimpleClass"),longest-match}

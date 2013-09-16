@@ -7,9 +7,14 @@ module GHC-ExistentialQuantification
 		
 		context-free syntax
 			Context Constr -> Constr {cons("ExistentialConstrs"), avoid}
-			Forall Context? Constr -> Constr {cons("ExistentialConstrs")}
+			%% Avoid ambiguities with RecordConstr with production
+			%% Context? Con RecordFields -> Constr, the context should be parsed as context of the existential constr
+			Forall Context Con RecordFields -> ExConstr {reject}
 			
 		context-free priorities
-			Forall Context? Constr -> Constr
+			{Forall Constr -> ExConstr {cons("ExistentialConstr")}
+			 ExConstr -> Constr
+			 Forall Context Constr -> ExContextConstr {cons("ExistentialContextConstr")}
+			 ExContextConstr -> Constr}
 			> Context Constr -> Constr
 			
