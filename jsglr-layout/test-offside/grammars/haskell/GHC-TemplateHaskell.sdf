@@ -12,11 +12,20 @@ exports
 		Splice -> Type {cons("SpliceType"), avoid}
 		Splice -> Decl {cons("SpliceDecl"), avoid}
 		
-		"$(" Exp ")" -> Splice {cons("ExpSlice")}
+		ExpSplice -> Splice
+		"$(" Exp ")" -> ExpSplice {cons("ExpSplice")}
 		VarSpliceID	 -> Splice {cons("VarSplice")}
+		
+		
 		
 	lexical syntax
 		"$" Var -> VarSpliceID
+		
+	lexical restrictions
+		%% Prevent ambiguities between OpApp and ExpSplice:
+		%% Exp1 $(Exp2) should be AppBin(Exp, SpliceExp(ExpSplice(Exp2))) and not
+		%% OpApp (Exp1, $, Exp2), this modifies the parsing result of files which does not use TemplateHaskell!!!
+		DollarSign -/- [\(]
 		
 	context-free syntax
 		

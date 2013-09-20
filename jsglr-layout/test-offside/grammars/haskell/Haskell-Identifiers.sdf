@@ -6,9 +6,11 @@ exports
     [A-Z][A-Za-z0-9\'\_]*       -> CONID
 
     %% Question: underscore in identifiers according to standard???
-    %% Answer: Underscore, Ò_Ó, is treated as a lowercase letter, and can occur wherever a lowercase letter can. However, Ò_Ó all by itself is a reserved identifier, used as wild card in patterns.
+    %% Answer: Underscore, ï¿½_ï¿½, is treated as a lowercase letter, and can occur wherever a lowercase letter can. However, ï¿½_ï¿½ all by itself is a reserved identifier, used as wild card in patterns.
 
-    [\!\#\$\%\&\*\+\.\/]
+	[\$]					  -> DollarSign
+	DollarSign				  -> Symbol		
+    [\!\#\%\&\*\+\.\/]
     \/ [\<\=\>\?\@\\\^\|\-\~] -> Symbol
     Symbol (Symbol | [\:])*   -> VARSYM
     [\:] (Symbol | [\:])+     -> CONSYM

@@ -31,7 +31,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = true;
+  private final static boolean LOGGING = false;
   
   private static Context normalizeContext = normalize.init();
   private static Context compareContext = CompareAST.init();
@@ -95,7 +95,8 @@ public class TestFile extends TestCase {
   //  file += "actor/actor-0.1.1/Chain.hs";
     //file += "alms/alms-0.6.3/src/BasisUtils.hs";
    // file+="accelerate-cuda/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/AST.hs";
-    file += "AERN-Net/AERN-Net-0.2.1.1/src/Control/ERNet/Deployment/Local/Channel.hs";
+  //  file = "/Users/moritzlichter/Desktop/Test4.hs";
+    file += "arx/arx-0.1.1/System/Posix/ARX/TMPXTools.hs";
     
     testFile(new File(file), file, "main");
    // testFile(new File(file), file, "main");
@@ -373,8 +374,9 @@ public class TestFile extends TestCase {
     } catch (ExecutionException e) {
       if (e.getCause() instanceof SGLRException) {
         result.parseExceptions.t3 = e.getCause().getMessage();
-        if (LOGGING)
+        if (LOGGING) {
           System.out.println(e.getCause().getMessage());
+        }
       }
 
       result.stackOverflow.t3 = e.getCause() instanceof StackOverflowError;

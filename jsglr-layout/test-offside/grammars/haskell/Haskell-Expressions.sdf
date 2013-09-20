@@ -1,4 +1,8 @@
 module Haskell-Expressions
+
+imports
+	Haskell-Identifier-Sorts
+	
 exports
   context-free syntax
     Exp -> AnyExp
@@ -38,7 +42,9 @@ exports
   > Exp -> Aexp
   > Exp Exp -> Exp {cons("AppBin"),left}
   > "-" Exp -> Exp {cons("Negation")}
-  > Exp Qop Exp -> Exp {cons("OpApp"), right}
+  > {Exp Qop Exp -> Exp {cons("OpApp"), right}
+  	 
+  	}
   > Exp "::" CType -> Exp {cons("Typed")}
 
 
