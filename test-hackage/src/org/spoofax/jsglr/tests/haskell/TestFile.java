@@ -11,7 +11,7 @@ import junit.framework.TestCase;
 
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.PrettyPrinter;
+import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.tests.haskell.CommandExecution.ExecutionError;
 import org.spoofax.jsglr.tests.haskell.compare.CompareAST;
 import org.spoofax.jsglr.tests.haskell.compare.CompareLibrary;
@@ -22,7 +22,6 @@ import org.spoofax.jsglr_layout.tests.haskell.HaskellParser;
 import org.spoofax.jsglr_orig.io.FileTools;
 import org.spoofax.terms.Term;
 import org.strategoxt.lang.Context;
-import org.strategoxt.stratego_lib.new_0_0;
 import org.sugarj.haskell.normalize.normalize;
 import org.sugarj.haskell.normalize.normalize_0_0;
 
@@ -32,7 +31,8 @@ import org.sugarj.haskell.normalize.normalize_0_0;
 public class TestFile extends TestCase {
 
   private final static boolean LOGGING = false;
-  
+  private final static boolean CLEAN_FILES = false;
+
   private static Context normalizeContext = normalize.init();
   private static Context compareContext = CompareAST.init();
   static {
@@ -49,59 +49,84 @@ public class TestFile extends TestCase {
   private IStrategoTerm oldResult;
 
   private FileResult result;
- 
+
   public void testFile_main() throws IOException {
     // src/org/spoofax/jsglr/tests/haskell/main.hs
-    //String file = "sample-data/template-haskell/Printf.hs";//"d:/tmp/test.hs";
-    //String file = "hackage-data/activehs/0.3/activehs-0.3/Parse.hs";
-    //String file = "hackage-data/accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/crystal/Config.hs";
-   // String file = "hackage-data/zoom/0.1.0.1/zoom-0.1.0.1/Zoom/Template/TH.hs";
-  //  String file = "hackage-data/AC-MiniTest/1.1.1/AC-MiniTest-1.1.1/Test/AC/Test.hs";
-    //String file = "hackage-data/accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Pretty/Traverse.hs";
-   // String file = "hackage-data/AbortT-transformers/1.0/AbortT-transformers-1.0/Control/Monad/Trans/Abort.hs";
-  //  String file = "hackage-data/AC-VanillaArray/1.1.2/AC-VanillaArray-1.1.2/Data/Array/Vanilla/Unsafe.hs";
-   // String file = "hackage-data/accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/tests/simple/DotP.hs";
-    //String file = "hackage-data/AC-Vector-Fancy/2.4.0/AC-Vector-Fancy-2.4.0/Data/Vector/Fancy.hs";
-   // String file ="hackage-data/accelerate-io/0.12.0.0/accelerate-io-0.12.0.0/Data/Array/Accelerate/IO/Repa.hs";
-   //  String file = "hackage-data/ZipFold/0.1.4/ZipFold-0.1.4/src/Data/WithCont.hs";
-    //String file = "hackage-data/Zwaluw/0.1/Zwaluw-0.1/Web/Zwaluw.hs";
+    // String file =
+    // "sample-data/template-haskell/Printf.hs";//"d:/tmp/test.hs";
+    // String file = "hackage-data/activehs/0.3/activehs-0.3/Parse.hs";
+    // String file =
+    // "hackage-data/accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/crystal/Config.hs";
+    // String file =
+    // "hackage-data/zoom/0.1.0.1/zoom-0.1.0.1/Zoom/Template/TH.hs";
+    // String file =
+    // "hackage-data/AC-MiniTest/1.1.1/AC-MiniTest-1.1.1/Test/AC/Test.hs";
+    // String file =
+    // "hackage-data/accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Pretty/Traverse.hs";
+    // String file =
+    // "hackage-data/AbortT-transformers/1.0/AbortT-transformers-1.0/Control/Monad/Trans/Abort.hs";
+    // String file =
+    // "hackage-data/AC-VanillaArray/1.1.2/AC-VanillaArray-1.1.2/Data/Array/Vanilla/Unsafe.hs";
+    // String file =
+    // "hackage-data/accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/tests/simple/DotP.hs";
+    // String file =
+    // "hackage-data/AC-Vector-Fancy/2.4.0/AC-Vector-Fancy-2.4.0/Data/Vector/Fancy.hs";
+    // String file
+    // ="hackage-data/accelerate-io/0.12.0.0/accelerate-io-0.12.0.0/Data/Array/Accelerate/IO/Repa.hs";
+    // String file =
+    // "hackage-data/ZipFold/0.1.4/ZipFold-0.1.4/src/Data/WithCont.hs";
+    // String file = "hackage-data/Zwaluw/0.1/Zwaluw-0.1/Web/Zwaluw.hs";
     String file = "hackage-data/";
-    //file += "accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/quickcheck/Test/Base.hs";
- //   String file = "hackage-data/ZipFold/0.1.4/ZipFold-0.1.4/src/Data/Zip/FoldL.hs";
-    //file += "zipper/0.4.1/zipper-0.4.1/src/Generics/MultiRec/Zipper.hs";
-   // file += "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Prelude.hs";
-    //file += "abstract-deque/0.1.5/abstract-deque-0.1.5/Data/Concurrent/Deque/Class.hs";
-    //file += "active/0.1.0.1/active-0.1.0.1/src/Data/Active.hs";
-   // file += "abstract-par/0.3.1/abstract-par-0.3.1/Control/Monad/Par/Class.hs";
-   // file += "abstract-deque/0.1.5/abstract-deque-0.1.5/Data/Concurrent/Deque/Tests.hs";
-  //  file += "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Data.hs";
-  //  file += "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Delayed.hs";
-    //file += "4Blocks/0.2/4Blocks-0.2/Core/Game.hs";
-   // file += "zeno/0.2.0.1/zeno-0.2.0.1/src/Main.hs";
-    //file += "activehs/0.3/activehs-0.3/Main.hs";
-   // file += "dbmigrations/0.5/dbmigrations-0.5/src/Database/Schema/Migrations/Filesystem.hs";
-   // file += "hakyll/3.2.7.2/hakyll-3.2.7.2/src/Hakyll/Web/Pandoc/Biblio.hs";
-   // file += "zipper/0.4.1/zipper-0.4.1/examples/ASTUse.hs";
-   // file += "acid-state/0.6.3/acid-state-0.6.3/examples/StressTestNoTH.hs";
-   // file +="accelerate-cuda/0.12.0.0/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/Execute.hs";
-    //file +="hamtmap/0.3/hamtmap-0.3/Data/HamtMap.hs";
-    //file += "acme-http/0.2.1/acme-http-0.2.1/Acme/Response.hs";
-    //file += "matsuri/0.0.4/matsuri-0.0.4/Widgets/ListBox.hs";
-   // file += "acid-state/0.6.3/acid-state-0.6.3/src-unix/FileIO.hs";
-   // file += "accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/tests/io/BlockCopy.hs";
-   // file+="cmdargs/cmdargs-0.9.5/System/Console/CmdArgs/Quote.hs";
-   // file+= "/Crypto/Crypto-4.2.5/WordListTest.hs";
-    //file+="Hermes/Hermes-0.0.4/Network/Hermes/Signature.hs";
-  //  file += "actor/actor-0.1.1/Chain.hs";
-    //file += "alms/alms-0.6.3/src/BasisUtils.hs";
-   // file+="accelerate-cuda/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/AST.hs";
-  //  file = "/Users/moritzlichter/Desktop/Test4.hs";
-    file += "arx/arx-0.1.1/System/Posix/ARX/TMPXTools.hs";
-    
+    // file +=
+    // "accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/quickcheck/Test/Base.hs";
+    // String file =
+    // "hackage-data/ZipFold/0.1.4/ZipFold-0.1.4/src/Data/Zip/FoldL.hs";
+    // file += "zipper/0.4.1/zipper-0.4.1/src/Generics/MultiRec/Zipper.hs";
+    // file +=
+    // "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Prelude.hs";
+    // file +=
+    // "abstract-deque/0.1.5/abstract-deque-0.1.5/Data/Concurrent/Deque/Class.hs";
+    // file += "active/0.1.0.1/active-0.1.0.1/src/Data/Active.hs";
+    // file +=
+    // "abstract-par/0.3.1/abstract-par-0.3.1/Control/Monad/Par/Class.hs";
+    // file +=
+    // "abstract-deque/0.1.5/abstract-deque-0.1.5/Data/Concurrent/Deque/Tests.hs";
+    // file +=
+    // "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Data.hs";
+    // file +=
+    // "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Delayed.hs";
+    // file += "4Blocks/0.2/4Blocks-0.2/Core/Game.hs";
+    // file += "zeno/0.2.0.1/zeno-0.2.0.1/src/Main.hs";
+    // file += "activehs/0.3/activehs-0.3/Main.hs";
+    // file +=
+    // "dbmigrations/0.5/dbmigrations-0.5/src/Database/Schema/Migrations/Filesystem.hs";
+    // file += "hakyll/3.2.7.2/hakyll-3.2.7.2/src/Hakyll/Web/Pandoc/Biblio.hs";
+    // file += "zipper/0.4.1/zipper-0.4.1/examples/ASTUse.hs";
+    // file += "acid-state/0.6.3/acid-state-0.6.3/examples/StressTestNoTH.hs";
+    // file
+    // +="accelerate-cuda/0.12.0.0/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/Execute.hs";
+    // file +="hamtmap/0.3/hamtmap-0.3/Data/HamtMap.hs";
+    // file += "acme-http/0.2.1/acme-http-0.2.1/Acme/Response.hs";
+    // file += "matsuri/0.0.4/matsuri-0.0.4/Widgets/ListBox.hs";
+    // file += "acid-state/0.6.3/acid-state-0.6.3/src-unix/FileIO.hs";
+    // file +=
+    // "accelerate-examples/0.12.0.0/accelerate-examples-0.12.0.0/examples/tests/io/BlockCopy.hs";
+    // file+="cmdargs/cmdargs-0.9.5/System/Console/CmdArgs/Quote.hs";
+    // file+= "/Crypto/Crypto-4.2.5/WordListTest.hs";
+    // file+="Hermes/Hermes-0.0.4/Network/Hermes/Signature.hs";
+    // file += "actor/actor-0.1.1/Chain.hs";
+    // file += "alms/alms-0.6.3/src/BasisUtils.hs";
+    // file+="accelerate-cuda/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/AST.hs";
+    // file = "/Users/moritzlichter/Desktop/Test4.hs";
+    // file += "array-utils/array-utils-0.3/Data/Array/Util.hs";
+    // file += "base/base-4.5.0.0/GHC/IO/Handle/Types.hs";
+    //file += "grapefruit-examples/grapefruit-examples-0.1.0.2/src/Examples/Grapefruit/Simple.hs";
+    file += "DOM/DOM-2.0.1/Data/DOM/HTMLInputElement.hs";
+
     testFile(new File(file), file, "main");
-   // testFile(new File(file), file, "main");
-   // testFile(new File(file), file, "main");
-    
+    // testFile(new File(file), file, "main");
+    // testFile(new File(file), file, "main");
+
     String csv = file + ".csv";
     result.writeCSVHeader(csv);
     result.appendAsCSV(csv);
@@ -189,7 +214,7 @@ public class TestFile extends TestCase {
     String input;
     try {
       input = FileTools.tryLoadFileAsString(f.getAbsolutePath());
-    //  System.out.println(input);
+      // System.out.println(input);
     } catch (OutOfMemoryError e) {
       result.outOfMemory.t1 = true;
       return null;
@@ -231,7 +256,7 @@ public class TestFile extends TestCase {
           && !(e.getCause() instanceof StackOverflowError)) {
         result.otherExceptions.t1 = e.getCause().getMessage();
         if (LOGGING) {
-        e.getCause().printStackTrace();
+          e.getCause().printStackTrace();
         }
       }
     } finally {
@@ -303,8 +328,8 @@ public class TestFile extends TestCase {
       }
 
       result.stackOverflow.t2 = e.getCause() instanceof StackOverflowError;
-      //if (e.getCause() instanceof StackOverflowError)
-      //  e.getCause().printStackTrace();
+      // if (e.getCause() instanceof StackOverflowError)
+      // e.getCause().printStackTrace();
 
       if (!(e.getCause() instanceof SGLRException)
           && !(e.getCause() instanceof StackOverflowError))
@@ -380,8 +405,8 @@ public class TestFile extends TestCase {
       }
 
       result.stackOverflow.t3 = e.getCause() instanceof StackOverflowError;
-     // if (e.getCause() instanceof StackOverflowError)
-        //e.getCause().printStackTrace();
+      // if (e.getCause() instanceof StackOverflowError)
+      // e.getCause().printStackTrace();
 
       if (!(e.getCause() instanceof SGLRException)
           && !(e.getCause() instanceof StackOverflowError))
@@ -456,7 +481,7 @@ public class TestFile extends TestCase {
       messages[0] = (String[]) result[1];
       messages[1] = (String[]) result[2];
     } catch (ExecutionError e) {
-     // e.printStackTrace();
+      // e.printStackTrace();
       System.out.println(Arrays.toString(e.getMessages()[1]));
       messages = e.getMessages();
       return null;
@@ -572,6 +597,7 @@ public class TestFile extends TestCase {
 
     IStrategoTerm result = compare_0_0.instance.invoke(compareContext,
         compareContext.getFactory().makeTuple(term1, term2));
+
     if (result != null && Term.isTermList(result))
       return (IStrategoList) result;
 
@@ -591,19 +617,19 @@ public class TestFile extends TestCase {
   }
 
   private void clean(File f) {
-    /*
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".csv");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".norm");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp.expl");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp.impl");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".old");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".new.corre");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".new.orig");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".new.speed");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".new.impl");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".old.pt");
-     * Utilities.deleteFile(f.getAbsoluteFile() + ".new.pt");
-     */
+    if (CLEAN_FILES) {
+      Utilities.deleteFile(f.getAbsoluteFile() + ".csv");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".norm");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp.expl");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".norm.pp.impl");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".old");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".new.corre");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".new.orig");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".new.speed");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".new.impl");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".old.pt");
+      Utilities.deleteFile(f.getAbsoluteFile() + ".new.pt");
+    }
   }
 }

@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import junit.framework.TestCase;
@@ -23,7 +25,7 @@ public class TestAllPackages extends TestCase {
   private File csvFile;
 
   private int warmupCount = 0;
-  private static final int NUM_THREADS = 4;
+  private static final int NUM_THREADS = 1;
 
   public void warmup() throws IOException {
     String[] warmupPackages = new String[] { "matlab", "matrix-market",
@@ -59,6 +61,7 @@ public class TestAllPackages extends TestCase {
     BufferedReader in = null;
 
     final Semaphore s = new Semaphore(NUM_THREADS);
+    final List<Thread> threads = new LinkedList<Thread>();
 
     try {
       int i = 0;
@@ -77,9 +80,10 @@ public class TestAllPackages extends TestCase {
         if (NUM_THREADS == 1) {
           new TestPackage().testPackage(pkg, new MyFileResultObserver(pkg));
         } else {
+          
           s.acquire();
           final String pkg_name = pkg;
-          new Thread() {
+          Thread t = new Thread() {
             public void run() {
               try {
                 new TestPackage().testPackage(pkg_name,
@@ -87,11 +91,26 @@ public class TestAllPackages extends TestCase {
               } catch (Exception e) {
                 e.printStackTrace();
               } finally {
+                synchronized(threads) {
+                  threads.remove(this);
+                }
                 s.release();
               }
             }
-          }.start();
+          };
+          synchronized(threads) {
+          threads.add(t);
+          }
+          t.start();
+         
         }
+      }
+      while(!threads.isEmpty()) {
+        Thread t = null;
+        synchronized(threads) {
+          t = threads.get(0);
+        }
+        t.join();
       }
 
     } catch (Throwable e) {
@@ -112,7 +131,7 @@ public class TestAllPackages extends TestCase {
       new FileResult().writeCSVHeader(pkgCsv.getAbsolutePath());
     }
 
-    public void observe(FileResult packageResult) throws IOException {
+    public synchronized void observe(FileResult packageResult) throws IOException {
       packageResult.appendAsCSV(csvFile.getAbsolutePath());
       packageResult.appendAsCSV(pkgCsv.getAbsolutePath());
 

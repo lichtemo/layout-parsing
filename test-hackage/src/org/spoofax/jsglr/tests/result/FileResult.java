@@ -76,6 +76,12 @@ public class FileResult {
     return builder.toString();
   }
   
+  public void readFromCSVString(StringBuilder buffer) {
+    readFromCSV(buffer);
+    readFromCSV(buffer);
+    readFromCSV(buffer);
+  }
+  
   public void writeCSVHeader(String file) throws IOException {
     FileOutputStream out = new FileOutputStream(file);
     try {
@@ -117,12 +123,63 @@ public class FileResult {
       writeString(out, o.toString());
   }
   
+  @SuppressWarnings("unchecked")
+  private <T> T read(StringBuilder buffer, Class<T> clazz) {
+    String str = getNextToken(buffer);
+    if (str.equals("null")) {
+      return null;
+    }
+    if (clazz == Integer.class) {
+      return (T) (Integer) Integer.parseInt(str);
+    } else if (clazz == Long.class) {
+      return (T) (Long) Long.parseLong(str);
+    } else if (clazz == String.class) {
+      return (T) unescapeString(str);
+    } else if (clazz == Boolean.class) {
+      return (T) (Boolean) Boolean.parseBoolean(str);
+    }
+    return null;
+  }
+  
   private void write(StringBuilder out, DataPoint<? extends Object> d, int run) {
     write(out, d.get(run));
+  }
+  
+  private <T> void read(StringBuilder buffer, DataPoint<T> d, int run, Class<T> clazz) {
+    d.set(read(buffer, clazz), run);
   }
 
   private void writeSem(StringBuilder out) {
     out.append(';');
+  }
+  
+  private String getNextToken(StringBuilder buffer) {
+    StringBuilder builder = new StringBuilder();
+    boolean inEscape= buffer.charAt(0)=='\"';
+    if (inEscape) {
+      int numFollowingQuotationMarks = 0;
+      builder.append(buffer.charAt(0));
+      buffer.deleteCharAt(0);
+      while(!(numFollowingQuotationMarks%2==1 && buffer.charAt(0)==';')) {
+        char c = buffer.charAt(0);
+        if (c == '\"') {
+          numFollowingQuotationMarks ++;
+        } else {
+          numFollowingQuotationMarks = 0;
+        }
+        builder.append(c);
+        buffer.deleteCharAt(0);
+      }
+      buffer.deleteCharAt(0);
+    } else {
+      while(buffer.charAt(0)!=';') {
+        builder.append(buffer.charAt(0));
+        buffer.deleteCharAt(0);
+      }
+      buffer.deleteCharAt(0);
+    }
+  //  System.out.println("Token " + builder.toString());
+    return builder.toString();
   }
   
   private void writeString(StringBuilder out, String s) {
@@ -143,6 +200,16 @@ public class FileResult {
   
   private String escapeString(String s) {
     return "\"" + s.replace("\"", "\"\"") + "\"";
+  }
+  
+  private String unescapeString(String s) {
+    if (s.length() == 0) {
+      return s;
+    }
+    if (s.length() <2) {
+      System.out.println(s);
+    }
+    return s.substring(1, s.length()-1).replace("\"\"", "\"");
   }
   
   private void writeAsCSV(StringBuilder builder, int run) {
@@ -185,6 +252,55 @@ public class FileResult {
     write(builder, differencesToReferenceParser, run); writeSem(builder);
     
     builder.append('\n');
+  }
+  
+  private void readFromCSV(StringBuilder buffer) {
+    pkg = read(buffer, String.class);
+    path = read(buffer, String.class);
+    int run = read(buffer, Integer.class);
+    
+    allSuccess = read(buffer, Boolean.class);
+    allNull = read(buffer, Boolean.class);
+    
+    skipped = read(buffer, Boolean.class);
+    cppPreprocess = read(buffer, Boolean.class);
+    makeExplicitLayout = read(buffer, Boolean.class);
+    makeImplicitLayout = read(buffer, Boolean.class);
+    ambInfix = read(buffer, Boolean.class);
+    referenceTime = read(buffer, Long.class);
+    
+    read(buffer, linesOfCode, run, Integer.class);
+    read(buffer, byteSize, run, Integer.class);
+    
+    read(buffer, parseOk, run, Boolean.class);
+    read(buffer, normalizeOk, run, Boolean.class);
+    
+    read(buffer, time, run, Long.class);
+    read(buffer, ambiguities, run, Integer.class);
+    read(buffer, stackOverflow, run, Boolean.class);
+    read(buffer, outOfMemory, run, Boolean.class);
+    read(buffer, timeout, run, Boolean.class);
+    read(buffer, memoryBefore, run, Long.class);
+    read(buffer, memoryAfter, run, Long.class);
+    
+    read(buffer, parseExceptions, run, String.class);
+    read(buffer, otherExceptions, run, String.class);
+    
+    read(buffer, layoutFilterCallsParseTime, run, Integer.class);
+    read(buffer, layoutFilteringParseTime, run, Integer.class);
+    read(buffer, layoutFilterCallsDisambiguationTime, run, Integer.class);
+    read(buffer, layoutFilteringDisambiguationTime, run, Integer.class);
+    read(buffer, enforcedNewlineSkips, run, Integer.class);
+    
+    read(buffer, differencesToReferenceParser, run, Integer.class);
+    if (buffer.length() == 0) {
+      return;
+    }
+    char c = buffer.charAt(0);
+    if (c != '\n') {
+      throw new IllegalArgumentException("Invalid cahr: "+ c);
+    }
+    buffer.deleteCharAt(0);
   }
 
   private void writeCSVHeader(StringBuilder builder) {

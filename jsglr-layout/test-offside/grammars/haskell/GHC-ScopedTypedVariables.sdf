@@ -6,5 +6,6 @@ imports
 	
 exports
 	context-free syntax
-			
+		
 		APat "::" CType -> Pat {cons("TypeSignaturePattern")}
+	

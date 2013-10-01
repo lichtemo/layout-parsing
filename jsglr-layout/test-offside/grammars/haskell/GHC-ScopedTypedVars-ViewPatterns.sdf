@@ -1,0 +1,12 @@
+module GHC-ScopedTypedVars-ViewPatterns
+
+imports
+	Haskell-Signature-Declarations
+	Haskell-Patterns
+	
+exports
+	context-free syntax
+		
+		%% Prefer SignaturePattern to ViewPatterns with a typed expression
+		
+		Exp "::" CType "->" Pat -> VPat {reject}
