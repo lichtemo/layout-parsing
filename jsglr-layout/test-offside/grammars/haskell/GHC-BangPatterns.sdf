@@ -5,5 +5,16 @@ imports Haskell-Patterns
 exports
 	
 	context-free syntax
-		"!" Pat 	-> Pat {cons("BangPattern")}
-		 "!" APat 	-> APat {cons("BangPattern"),avoid}
+		Pat	-> BPat
+		APat	-> BPat {reject}
+	
+		"!" APat 	-> ABPat	{cons("BangPattern")}
+		ABPat	-> APat
+	
+		ABPat Qconop LPat -> Pat {reject}
+		 
+	context-free priorities
+		 Pat Qconop LPat -> Pat 
+		 > {
+		 	"!" BPat 	-> Pat {cons("BangPattern")}
+		 }
