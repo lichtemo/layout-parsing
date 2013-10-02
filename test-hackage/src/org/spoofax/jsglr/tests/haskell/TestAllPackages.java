@@ -25,7 +25,7 @@ public class TestAllPackages extends TestCase {
   private File csvFile;
 
   private int warmupCount = 0;
-  private static final int NUM_THREADS = 1;
+  private static final int NUM_THREADS = 4;
 
   public void warmup() throws IOException {
     String[] warmupPackages = new String[] { "matlab", "matrix-market",

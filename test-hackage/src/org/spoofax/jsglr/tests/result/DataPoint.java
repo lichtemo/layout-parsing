@@ -55,4 +55,11 @@ public class DataPoint<T> {
       throw new IllegalArgumentException();
     }
   }
+
+  @Override
+  public String toString() {
+    return "DataPoint [t1=" + t1 + ", t2=" + t2 + ", t3=" + t3 + "]";
+  }
+  
+  
 }

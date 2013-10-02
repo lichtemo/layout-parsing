@@ -30,7 +30,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = false;
+  private final static boolean LOGGING = true;
   private final static boolean CLEAN_FILES = false;
 
   private static Context normalizeContext = normalize.init();
@@ -121,7 +121,7 @@ public class TestFile extends TestCase {
     // file += "array-utils/array-utils-0.3/Data/Array/Util.hs";
     // file += "base/base-4.5.0.0/GHC/IO/Handle/Types.hs";
     //file += "grapefruit-examples/grapefruit-examples-0.1.0.2/src/Examples/Grapefruit/Simple.hs";
-    file += "DOM/DOM-2.0.1/Data/DOM/HTMLInputElement.hs";
+    file += "algebra/algebra-2.1.1.2/Numeric/Algebra/Class.hs";
 
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");

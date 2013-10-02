@@ -136,7 +136,7 @@ public class FileResult {
     } else if (clazz == String.class) {
       return (T) unescapeString(str);
     } else if (clazz == Boolean.class) {
-      return (T) (Boolean) Boolean.parseBoolean(str);
+      return (T) (Boolean) Boolean.parseBoolean(unescapeString(str));
     }
     return null;
   }
