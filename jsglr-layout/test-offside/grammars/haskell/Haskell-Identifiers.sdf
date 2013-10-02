@@ -18,9 +18,12 @@ exports
     ReservedOp                -> VARSYM {reject}
     ReservedOp                -> CONSYM {reject}
     ":" -> CONSOP
+    
+    "<-"					  -> BindOp
 
   lexical restrictions
     CONID VARID -/- [A-Za-z0-9\'\_]
     VARSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
     CONSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
     CONSOP      -/- [\:] \/ [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+    BindOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]

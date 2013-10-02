@@ -12,7 +12,7 @@ exports
 		
 	context-free syntax
 		
-    	Pat "<-" Exp 				-> Guard {cons("PatternGuard")}  
+    	Pat BindOp Exp 				-> Guard {cons("PatternGuard")}  
     	"let" Declbinds 			-> Guard {cons("LocalDeclaration")}
     	Exp							-> Guard {cons("ExpGuard")}
     	

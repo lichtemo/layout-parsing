@@ -5,7 +5,7 @@ imports
 
 exports
   context-free syntax
-    Pat "<-" Exp 	-> Stmt 	{cons("BindStmt")}
+    Pat BindOp Exp 	-> Stmt 	{cons("BindStmt")}
     Exp               	-> Stmt 	{cons("ExpStmt")}
     "let" Declbinds   	-> Stmt 	{cons("LetStmt")}
     Qvar "=" Exp 	-> Fbind	{cons("FBind")}
