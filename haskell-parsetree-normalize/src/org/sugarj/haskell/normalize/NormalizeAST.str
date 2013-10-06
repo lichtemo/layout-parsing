@@ -36,7 +36,13 @@ rules
   norm-char-char : OctalEsc(hex) -> DecimalEsc(<oct-string-to-int; int-to-string> hex)
   norm-char-char : DecimalEsc(int) -> c
    where <string-to-int; is-ascii; not(?127)> int => int';
-         <implode-string> [int'] => c
+         <implode-string> [int'] => c';
+         <escape-char> c'	=> c
+         
+  escape-char: "\\" -> CharEsc ("\\")
+  escape-char: "\"" -> CharEsc ("\"")
+  escape-char: c	-> c
+         
   norm-char-char : DecimalEsc(int) -> DecimalEsc(int')
    where <string-to-int; int-to-string> int => int';
          <not(equal)> (int,int')
@@ -63,7 +69,7 @@ rules
   norm-char-char : DecimalEsc("19") -> ASCIIEsc("DC3")
   norm-char-char : DecimalEsc("20") -> ASCIIEsc("DC4")
   norm-char-char : DecimalEsc("21") -> ASCIIEsc("NAK")
-  norm-char-char : DecimalEsc("22") -> ASCIIEsc("SYM")
+  norm-char-char : DecimalEsc("22") -> ASCIIEsc("SYN")
   norm-char-char : DecimalEsc("23") -> ASCIIEsc("ETB")
   norm-char-char : DecimalEsc("24") -> ASCIIEsc("CAN")
   norm-char-char : DecimalEsc("25") -> ASCIIEsc("EM")
@@ -96,7 +102,7 @@ rules
   norm-char-char : ASCIIEsc("^S") -> ASCIIEsc("DC3")
   norm-char-char : ASCIIEsc("^T") -> ASCIIEsc("DC4")
   norm-char-char : ASCIIEsc("^U") -> ASCIIEsc("NAK")
-  norm-char-char : ASCIIEsc("^V") -> ASCIIEsc("SYM")
+  norm-char-char : ASCIIEsc("^V") -> ASCIIEsc("SYN")
   norm-char-char : ASCIIEsc("^W") -> ASCIIEsc("ETB")
   norm-char-char : ASCIIEsc("^X") -> ASCIIEsc("CAN")
   norm-char-char : ASCIIEsc("^Y") -> ASCIIEsc("EM")

@@ -54,6 +54,11 @@ exports
     "if" AnyExp "then" AnyExp "else" Exp -> Exp {cons("If"), longest-match}
     "do" StmtList -> Exp {cons("Do"), longest-match}
     "case" AnyExp "of" AltList -> Exp {cons("Case"), longest-match}
+     "if" AnyExp	-> LayIf {layout("2.first.col < 2.left.col")}
+     "then" AnyExp	-> LayThen {layout("2.first.col < 2.left.col")}
+     "else" AnyExp	-> LayElse {layout("2.first.col < 2.left.col")}
+     LayIf LayThen LayElse 	-> IfThenElse {cons("If"), longest-match}
+     IfThenElse 			-> LayIfThenElse {layout("1.first.col <= 1.left.col")}
 
   context-free priorities
    Exp Exp -> Exp {cons("AppBin"),left}

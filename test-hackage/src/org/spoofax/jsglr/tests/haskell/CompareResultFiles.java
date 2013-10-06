@@ -1,11 +1,14 @@
 package org.spoofax.jsglr.tests.haskell;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.CharBuffer;
+import java.nio.MappedByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -67,11 +70,11 @@ public class CompareResultFiles {
     BufferedReader reader = null;
     try {
       reader = new BufferedReader(new FileReader(csvPath));
-
       String read;
       while ((read = reader.readLine()) != null) {
         buffer.add(new StringBuilder(read));
       }
+
     } catch (IOException e) {
       throw e;
     } finally {
@@ -88,7 +91,11 @@ public class CompareResultFiles {
 
   private StringBuilder extractFirstSet(LinkedList<StringBuilder> builders) {
     StringBuilder b = new StringBuilder();
-    b.append(builders.removeFirst());
+    StringBuilder s1 = builders.removeFirst();
+    if (s1.toString().startsWith("\"package\";\"path\";\"run\"")) {
+      return extractFirstSet(builders);
+    }
+    b.append(s1);
     b.append('\n');
     b.append(builders.removeFirst());
     b.append('\n');
@@ -103,11 +110,12 @@ public class CompareResultFiles {
  
     int id = this.results.size();
     int num = 0;
-    int total = new File(folder).listFiles().length;
+    File [] files =  new File(folder).listFiles();
+    int total =files.length;
     double last = 0;
     results.add(result);
-    for (File f : new File(folder).listFiles()) {
-      readFile(f,id);
+    for (File f : files) {
+      readFile(f,id, false);
       num ++;
       if (num %100 == 0) {
         System.out.print(".");
@@ -121,14 +129,24 @@ public class CompareResultFiles {
     System.out.println();
     return id;
   }
+  
+  public int readFile(String file)throws IOException {
+    int id = results.size();
+      results.add(new HashMap<CompareResultFiles.FileIdentifier, FileResult>());
+    readFile(new File(file),id, true);
+    return id;
+  }
 
-  private void readFile(File csvPath, int id) throws IOException {
-  //  System.out.println("Read " + csvPath);
-    LinkedList<StringBuilder> fileContents = readFile(csvPath);
+  private void readFile(File csvPath, int id, boolean verbose) throws IOException {
+    if (verbose)
+      System.out.println("Read: " + csvPath);
+   LinkedList<StringBuilder> fileContents = readFile(csvPath);
     fileContents.removeFirst();
+  if (verbose)
+    System.out.println("Parse ");
     HashMap<FileIdentifier, FileResult> result = results.get(id);
     int num = 0;
-    try {
+   try {
     while (!fileContents.isEmpty()) {
       FileResult fileResult = new FileResult();
       fileResult.readFromCSVString(extractFirstSet(fileContents));
@@ -136,14 +154,16 @@ public class CompareResultFiles {
       num++;
       if (num % 1000 == 0) {
         num = 0;
+        System.out.print(".");
       }
     }
     }catch(Exception e) {
       System.err.println("Exception while reading " + csvPath);
       e.printStackTrace();
     }
- //   System.out.println();
-  //  System.out.println("Num Values: " + result.keySet().size());
+   if (verbose)
+    System.out.println("Num Values: " + result.keySet().size());
+ 
    
   }
 
@@ -170,7 +190,7 @@ public class CompareResultFiles {
       
       @Override
       public boolean filter(FileResult r) {
-        return r.differencesToReferenceParser.t2 > 0 || r.differencesToReferenceParser.t3 > 0 && r.makeExplicitLayout && r.makeImplicitLayout;
+        return (r.differencesToReferenceParser.t2 > 0 || r.differencesToReferenceParser.t3 > 0) && r.makeExplicitLayout && r.makeImplicitLayout;
       }
     });
   }
@@ -215,7 +235,8 @@ public class CompareResultFiles {
     CompareResultFiles comp = new CompareResultFiles();
 
   //  int id1 = comp.readFolder("all1379944237523");
-    int id2 = comp.readFolder("all1380527524156");
+    int id2 = comp.readFile("all1380997465516/00all.csv");
+    int id1 = comp.readFile("all1380654578736/00all.csv");
    // int id1 = comp.readFile("all1380654578736/buildbox.csv");
     /*
     LinkedList<Pair<FileResult, FileResult>> diff = comp.listFilesDiffParsed(id2, id1);
@@ -257,9 +278,31 @@ public class CompareResultFiles {
     });
     sort(notOk);
     print(notOk);*/
-    LinkedList<FileResult> diffs = comp.listFilesWithImplExplDifference(id2);
-    sort(diffs);
-    print(diffs,1000);
+    LinkedList<FileResult> diffs2 = comp.listFilesWithImplExplDifference(id2);
+    LinkedList<FileResult> diffs1 = comp.listFilesWithImplExplDifference(id1);
+    LinkedList<FileResult> diff = intersectLists(diffs2, diffs1);
+    sort(diff);
+    print(diff,1000);
+    
+  }
+
+  private static LinkedList<FileResult> intersectLists(LinkedList<FileResult> diffs2,
+      LinkedList<FileResult> diffs1) {
+    LinkedList<FileResult> result = new LinkedList<FileResult>();
+    for (FileResult r : diffs2) {
+      boolean found = false;
+      FileIdentifier comp = new FileIdentifier(r);
+      for (FileResult r2 : diffs1) {
+        if (comp.equals(new FileIdentifier(r2))) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        result.add(r);
+      }
+    }
+    return result;
   }
 
 }

@@ -55,10 +55,43 @@ rules
 
   //functions
   compare-term: (VarFunLHS(BinOp(n1),[Var(l1),Var(r1)]), OpFunLHS(Var(l2),n2,Var(r2))) -> <map(compare); concat> [(n1, n2), (l1,l2), (r1,r2)]
-  compare-term: (Forall([x1,y1]),Forall([x2,y2])) ->  <map(compare); concat> [(x1,y2),(y1,x2)]
-  compare-term: (Forall([x1,y1]),Forall([x2,y2])) ->  <map(compare); concat> [(x1,x2),(y1,y2)]
+  compare-term: (Forall(x), Forall(y))		->	<compare-forall-params> (x,y)
+  
+  // fixities: 9 is default level
+  compare-term: (FixDecl(x1, None(), y1), FixDecl(x2, Some("9"), y2)) -> <map(compare);concat>[(x1,x2),(y1,y2)]
+  compare-term: (FixDecl(x1, Some("9"), y1), FixDecl(x2,None(), y2)) -> <map(compare);concat>[(x1,x2),(y1,y2)]
 
 	
+rules
+	
+	orfold: ([[]|xs])	-> []
+	orfold: ([x])		-> x
+	orfold: ([x|xs])	-> <orfold> (xs)
+	
+	
+	compare-forall-params: (x,y) -> <orfold> (allResults)
+		where	<map(\e -> <compare>(x,e)\)> (<permutate>(y)) => allResults
+	
+	insertElem: ([], elem, xs)							-> <conc>([elem], xs)
+	insertElem: ([num|nums], elem, [x|xs]) 				-> <conc>([x],  <insertElem>(nums, elem, xs))
+	
+	insertAllElem: ([], elem, list)						-> [<conc> ([elem], list)]
+	insertAllElem: ([num|nums], elem, list)			-> <conc> ([insertHead], insertTail)
+		where 	(<insertElem>([num|nums], elem, list)) 	=> insertHead;
+				<insertAllElem>(nums, elem, list)		=> insertTail
+	
+	flatten: ([])			-> []
+	flatten: ([x|[]])		-> x
+	flatten: ([[x|xs]|y])	-> <conc> ([x], <flatten>(<conc>([xs], y)))
+	flatten: ([[]|y])	-> <flatten> (y)
+	
+	
+	permutate: ([])		-> []
+	permutate: ([x])	-> [[x]]
+	permutate: ([x|xs])	->  <flatten> (inserted)
+		where <map(\ a -> <insertAllElem>(xs, x, a)\)> (<permutate>(xs)) => inserted
+		//where <insertAllElem>(xs, x, xs) => inserted
+
 
 rules
   peq(s) : (x, y) -> <equal> (<try(s)> x, <try(s)> y)

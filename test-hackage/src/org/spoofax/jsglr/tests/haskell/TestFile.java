@@ -121,7 +121,8 @@ public class TestFile extends TestCase {
     // file += "array-utils/array-utils-0.3/Data/Array/Util.hs";
     // file += "base/base-4.5.0.0/GHC/IO/Handle/Types.hs";
     //file += "grapefruit-examples/grapefruit-examples-0.1.0.2/src/Examples/Grapefruit/Simple.hs";
-    file += "algebra/algebra-2.1.1.2/Numeric/Algebra/Class.hs";
+    //file += "apelsin/apelsin-1.2/src/Toolbar.hs";
+    file += "encoding/encoding-0.6.6/dist/build/Data/Encoding/CP1251.hs";
 
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -131,6 +132,7 @@ public class TestFile extends TestCase {
     result.writeCSVHeader(csv);
     result.appendAsCSV(csv);
     System.out.println(csv);
+    System.out.println(result.allSuccess);
   }
 
   public FileResult testFile(File f, String path, String pkg)

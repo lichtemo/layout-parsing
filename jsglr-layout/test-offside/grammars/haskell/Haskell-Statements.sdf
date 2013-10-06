@@ -2,6 +2,7 @@ module Haskell-Statements
 
 imports
 	Haskell-Identifier-Sorts
+	Haskell-Expressions
 
 exports
   context-free syntax
@@ -30,7 +31,9 @@ exports
 
 
   context-free priorities
-    Stmt -> OffsideStmt {layout("1.first.col < 1.left.col")}
+   { Stmt -> OffsideStmt {layout("1.first.col < 1.left.col")}
+   	 LayIfThenElse -> OffsideStmt {cons("ExpStmt"), avoid}
+   }
   >
     OffsideStmt ";" -> OffsideStmt {layout("1.first.col < 2.first.col")}
   >
