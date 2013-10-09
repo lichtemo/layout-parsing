@@ -60,6 +60,27 @@ rules
   // fixities: 9 is default level
   compare-term: (FixDecl(x1, None(), y1), FixDecl(x2, Some("9"), y2)) -> <map(compare);concat>[(x1,x2),(y1,y2)]
   compare-term: (FixDecl(x1, Some("9"), y1), FixDecl(x2,None(), y2)) -> <map(compare);concat>[(x1,x2),(y1,y2)]
+  
+  // Empty contexts
+  compare-term: (ImplicitForall(Context([]),t1),t2)	-> <compare> (t1,t2)
+  compare-term: (t1,ImplicitForall(Context([]),t2))	-> <compare> (t1,t2)
+  
+  // Type Infix and Praefix operators
+  compare-term: (TypeInfOp(t1, op1, p1), TypePrOp(op2,[t2,p2])) -> <map(compare);concat>[(t1,t2),(op1,op2), (p1,p2)]
+  compare-term: (TypePrOp(op2,[t2,p2]), TypeInfOp(t1, op1, p1)) -> <map(compare);concat>[(t1,t2),(op1,op2), (p1,p2)]
+  
+  // Nested Function LHS
+  // Normalize FunLHS: Remove OpFunLHS and unnest NestedFunLHS
+  normalize-funls: OpFunLHS(p1,o,p2) -> VarFunLHS(o, [p1,p2])
+  normalize-funls: NestedFunLHS(fun, pats) -> <debug> (<concat-funls> (norm-fun, pats)) where
+  		<normalize-funls> (fun) => norm-fun
+  normalize-funls: p -> p
+  		
+  		
+  concat-funls: (VarFunLHS(o, pats1), pats2) -> VarFunLHS(o, <conc> (pats1, pats2))
+  concat-funls: (pat, pats) -> <conc> ([pat], pats) 
+  
+  compare-term: (lhs1, lhs2) -> <compare> (<normalize-funls> (lhs1), <normalize-funls> (lhs2))
 
 	
 rules
@@ -369,6 +390,10 @@ signature
     IntHash              : INTEGER -> Literal
     
 	Forall :  List(Var) -> Forall
+	
+	ImplicitForall	  	: Context * Type -> CType
+	TypePrOp			: Op * List(AType) -> Type
+	TypeInfOp			: AType * Op * AType -> Type
 
 
 signature

@@ -345,5 +345,29 @@ public class FileResult {
     builder.append('\n');
   }
 
+  @Override
+  public String toString() {
+    return "FileResult [pkg=" + pkg + ", path=" + path + ", allSuccess="
+        + allSuccess + ", allNull=" + allNull + ", skipped=" + skipped
+        + ", cppPreprocess=" + cppPreprocess + ", makeExplicitLayout="
+        + makeExplicitLayout + ", makeImplicitLayout=" + makeImplicitLayout
+        + ", ambInfix=" + ambInfix + ", referenceTime=" + referenceTime
+        + ", linesOfCode=" + linesOfCode + ", byteSize=" + byteSize
+        + ", parseOk=" + parseOk + ", normalizeOk=" + normalizeOk + ", time="
+        + time + ", ambiguities=" + ambiguities + ", stackOverflow="
+        + stackOverflow + ", outOfMemory=" + outOfMemory + ", parseExceptions="
+        + parseExceptions + ", otherExceptions=" + otherExceptions
+        + ", timeout=" + timeout + ", memoryBefore=" + memoryBefore
+        + ", memoryAfter=" + memoryAfter + ", layoutFilterCallsParseTime="
+        + layoutFilterCallsParseTime + ", layoutFilteringParseTime="
+        + layoutFilteringParseTime + ", layoutFilterCallsDisambiguationTime="
+        + layoutFilterCallsDisambiguationTime
+        + ", layoutFilteringDisambiguationTime="
+        + layoutFilteringDisambiguationTime + ", enforcedNewlineSkips="
+        + enforcedNewlineSkips + ", differencesToReferenceParser="
+        + differencesToReferenceParser + "]";
+  }
+
+  
   
 }
