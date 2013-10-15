@@ -122,8 +122,7 @@ public class TestFile extends TestCase {
     // file += "base/base-4.5.0.0/GHC/IO/Handle/Types.hs";
     //file += "grapefruit-examples/grapefruit-examples-0.1.0.2/src/Examples/Grapefruit/Simple.hs";
     //file += "apelsin/apelsin-1.2/src/Toolbar.hs";
-    file += "grammar-combinators/grammar-combinators-0.2.6/Text/GrammarCombinators/Transform/UnfoldRecursion.hs";
-    
+    file = "/Users/moritzlichter/Desktop/Stmts.hs";
     
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -561,6 +560,7 @@ public class TestFile extends TestCase {
       result.differencesToReferenceParser.t2 = checkDiff(pkg, f,
           newResultOrigNorm, oldResultNorm, "orig");
     } catch (StackOverflowError e) {
+      e.printStackTrace();
       result.normalizeOk.t2 = false;
     }
     try {

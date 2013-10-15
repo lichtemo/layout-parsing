@@ -53,10 +53,17 @@ exports
     "let" Declbinds "in" Exp -> Exp {cons("Let"), longest-match}
     "if" AnyExp "then" AnyExp "else" Exp -> Exp {cons("If"), longest-match}
     "do" StmtList -> Exp {cons("Do"), longest-match}
+    "do" StmtList -> DoLay {cons("Do"), longest-match}
     "case" AnyExp "of" AltList -> Exp {cons("Case"), longest-match}
-     "if" AnyExp	-> LayIf {layout("2.first.col < 2.left.col")}
-     "then" AnyExp	-> LayThen {layout("2.first.col < 2.left.col")}
-     "else" AnyExp	-> LayElse {layout("2.first.col < 2.left.col")}
+     "if" AnyExp	-> LayIf 	{layout("2.first.col < 2.left.col")}
+     "then" AnyExp	-> LayThen 	{layout("2.first.col < 2.left.col")}
+     "else" AnyExp	-> LayElse 	{layout("2.first.col < 2.left.col")}
+     %% the position of the "do" keyword does not matter here, so we include additional productions for do
+     %% layout constraint is the negation of the constraints above to avoid ambiguities, because do-blocks are parsed
+     %% as AnyExp which fullfil the layout constraint
+     "if" DoLay		-> LayIf	{layout("2.first.col >= 2.left.col")}
+     "then" DoLay	-> LayThen	{layout("2.first.col >= 2.left.col")}
+     "else" DoLay	-> LayElse 	{layout("2.first.col >= 2.left.col")}
      LayIf LayThen LayElse 	-> IfThenElse {cons("If"), longest-match}
      IfThenElse 			-> LayIfThenElse {layout("1.first.col <= 1.left.col")}
 

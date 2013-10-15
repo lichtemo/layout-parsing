@@ -281,8 +281,8 @@ public class CompareResultFiles {
     LinkedList<FileResult> diffs2 = comp.listFilesWithImplExplDifference(id2);
     LinkedList<FileResult> diffs1 = comp.listFilesWithImplExplDifference(id1);
     LinkedList<FileResult> diff = intersectLists(diffs1, diffs2);
-    sort(diff);
-    print(diff,1000);
+    sort(diffs2);
+    print(diffs2,1000);
     
   }
 

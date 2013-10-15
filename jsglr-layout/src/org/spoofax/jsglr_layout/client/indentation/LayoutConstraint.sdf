@@ -23,6 +23,7 @@ context-free syntax
   Var -> Constraint
   "all" "(" Var "," Constraint "," Constraint ")" -> Constraint {cons("all")}
   
+  "(" Constraint ")" -> Constraint {bracket}
 context-free priorities
   {
     Constraint "." "first" -> Constraint {cons("first")}

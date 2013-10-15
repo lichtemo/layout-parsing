@@ -72,9 +72,10 @@ rules
   // Nested Function LHS
   // Normalize FunLHS: Remove OpFunLHS and unnest NestedFunLHS
   normalize-funls: OpFunLHS(p1,o,p2) -> VarFunLHS(o, [p1,p2])
-  normalize-funls: NestedFunLHS(fun, pats) -> <debug> (<concat-funls> (norm-fun, pats)) where
+  normalize-funls: NestedFunLHS(fun, pats) ->  <concat-funls> (norm-fun, pats) where
   		<normalize-funls> (fun) => norm-fun
-  normalize-funls: p -> p
+  normalize-funls: PatLHS(x) -> x
+  normalize-funls: VarFunLHS(x,y) -> VarFunLHS(x,y)
   		
   		
   concat-funls: (VarFunLHS(o, pats1), pats2) -> VarFunLHS(o, <conc> (pats1, pats2))
@@ -194,7 +195,7 @@ signature
     NestedFunLHS     : FunLHS * List(APat) -> FunLHS
     OpFunLHS         : Pat * Varop * Pat -> FunLHS
     VarFunLHS        : Var * List(APat) -> FunLHS
-                     : Pat -> FunLHS
+    PatLHS           : Pat -> FunLHS
     Guarded          : Quals * Exp -> Gdrh
     GdValdef         : FunLHS * List(Gdrh) * Option(Where) -> Valdef
     ValdefW          : FunLHS * Exp * Where -> Valdef
