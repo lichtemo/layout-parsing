@@ -1,5 +1,7 @@
 <project default="compile">
 
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties" />
+	
 	<condition property="binary.sdf2table" value="${project.loc}/test-offside/tools/win/sdf2table.exe" else="${project.loc}/test-offside/tools/mac/sdf2table">
 		<os family="windows" />
 	</condition>
@@ -7,6 +9,14 @@
 	<property name="strategoxt" value="../../tools/strategoxt.jar" />
 	
 	<target name="compile" >
+		<for param="file">
+			<path>
+				<fileset dir="." includes="*.sdfu"/>
+			</path>
+			<sequential>
+				<unicodesdf file="@{file}"/>
+			</sequential>
+		</for>
 		<compile-grammar module="Haskell" />
 		<copy file="Haskell.tbl" tofile="../../../test/org/spoofax/jsglr_layout/tests/haskell/Haskell.tbl" />
 		<copy file="Haskell.tbl" tofile="../../../../jsglr-orig/test/org/spoofax/jsglr_orig/tests/haskell/Haskell.tbl" />
@@ -17,6 +27,22 @@
 	<target name="gen-signature">
 		<compile-signature module="Haskell"/>
 	</target>
+	
+	<macrodef name="unicodesdf">
+		<attribute name="file" />
+		<attribute name="encoding" default="UTF-8" />
+		<sequential>
+			<java  classname="org.spoofax.jsglr.unicode.preprocessor.UnicodeSDFPreprocessor" failonerror="true">
+				<classpath>
+					<pathelement path="${strategoxt}"/>
+					<pathelement location="/Users/moritzlichter/Developer/Java/Eclipse workspaces/HiwiSE/jsgrl/org.spoofax.jsglr/bin"/>
+				</classpath>
+				<arg value="@{file}" />
+				<arg value="@{encoding}" />
+			</java>
+		</sequential>
+	</macrodef>
+
 
 	<macrodef name="compile-grammar">
 		<attribute name="module" />

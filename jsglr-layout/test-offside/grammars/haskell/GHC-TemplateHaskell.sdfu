@@ -1,0 +1,74 @@
+module GHC-TemplateHaskell
+
+imports Haskell-Identifier-Sorts
+imports Haskell-Strings
+
+exports
+	context-free syntax
+	
+%%	Splices
+
+		Splice -> Exp {cons("SpliceExp"), avoid}
+		Splice -> Type {cons("SpliceType"), avoid}
+		Splice -> Decl {cons("SpliceDecl"), avoid}
+		
+		ExpSplice -> Splice
+		"$(" Exp ")" -> ExpSplice {cons("ExpSplice")}
+		VarSpliceID	 -> Splice {cons("VarSplice")}
+		
+		
+		
+	lexical syntax
+		"$" Var -> VarSpliceID
+		
+	lexical restrictions
+		%% Prevent ambiguities between OpApp and ExpSplice:
+		%% Exp1 $(Exp2) should be AppBin(Exp, SpliceExp(ExpSplice(Exp2))) and not
+		%% OpApp (Exp1, $, Exp2), this modifies the parsing result of files which does not use TemplateHaskell!!!
+		DollarSign -/- [\(]
+		
+	context-free syntax
+		
+	%% Impliying slices in Top Level Declarations
+%%		Exp -> Topdecl	
+		
+%%	Expression Quotations
+		
+		"[|" Exp "|]"		-> Exp		{cons("ExpQuotation")}
+		"[d|" Topdecl+ "|]"	-> TopDecl	{cons("TopdeclQuotation")}
+		"[t|" Type "|]" 	-> Type		{cons("TypeQuotation")}
+		"[p|" Pat "|]"		-> Pat		{cons("PatQuotation")}
+		
+%% Name Quotation
+
+	context-free syntax
+		NameQuotation		-> Exp		{cons("NameQuotation")}
+		
+	 syntax
+		<"'"-LEX> (<Qvar-CF> | <Qcon-CF>)		-> <NameQuotation-CF>
+		<"''"-LEX> (<Tyvar-CF> | <Gtycon-CF>)	-> <NameQuotation-CF>
+		<"'"-LEX> CharChar <"'"-LEX> -> <NameQuotation-CF> {reject}
+		
+	
+	syntax
+%%	Quasi Quotation
+	
+		"[" <VARID-LEX> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
+	
+	context-free syntax
+		QuasiQuote 		-> Exp
+		
+
+	lexical syntax
+ 		QuasiQuoteChar* -> QuasiQuoteString
+ 		%% any char except the pipe "|"
+ 		~u[\|] -> QuasiQuoteChar
+
+ 		"|" -> QuasiQuotePipe
+ 		%% pipe is also ok if ...
+ 		QuasiQuotePipe -> QuasiQuoteChar
+
+	lexical restrictions
+		 %% pipe is also ok if not followed by a closing bracket (since this would mark the end of the quasiquote block) 
+ 		QuasiQuotePipe -/- [\]]
+		
