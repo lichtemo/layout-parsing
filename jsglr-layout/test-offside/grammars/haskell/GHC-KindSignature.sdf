@@ -1,6 +1,7 @@
 module GHC-KindSignature
 
 imports Haskell-Syntax
+imports Haskell-Operators
 
 exports
 	
@@ -13,7 +14,7 @@ exports
 		AKind "->" Kind	-> Kind {cons("Kind->")}
 		
 		
-		"::" Kind	-> KindSig {cons("KindSignature")}
+		ProportionOp Kind	-> KindSig {ast("KindSignature(<2>)")}
 		KindSig		-> OptKindSig
 					-> OptKindSig {cons("EmptyKindSignature")}
-		"(" CType "::" Kind ")" -> AType
+		"(" CType ProportionOp Kind ")" -> AType {ast("KindedType(<1>,<3>)")}

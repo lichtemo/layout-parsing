@@ -1,5 +1,6 @@
 module Haskell-GHC-Rules
 imports ExtraSepLists0[Rule ";" Rules]
+imports Haskell-Operators
 exports
   context-free syntax
     "{-# RULES" Rules "#-}"        -> Decl 	 {cons("Rules")}
@@ -7,5 +8,5 @@ exports
     ("forall" RuleVarList "." )?   -> RuleForall {cons("RuleForall")}
     {RuleVar ","}+                 -> RuleVarList
     Varid 	     		   -> RuleVar
-    Varid "::" Type 		   -> RuleVar
+    Varid ProportionOp Type 		   -> RuleVar {ast("RuleVar(<1>,<3>)")}
    

@@ -11,17 +11,18 @@ import junit.framework.TestCase;
 
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
-import org.spoofax.interpreter.terms.ITermFactory;
 import org.spoofax.jsglr.tests.haskell.CommandExecution.ExecutionError;
 import org.spoofax.jsglr.tests.haskell.compare.CompareAST;
 import org.spoofax.jsglr.tests.haskell.compare.CompareLibrary;
 import org.spoofax.jsglr.tests.haskell.compare.compare_0_0;
+import org.spoofax.jsglr.tests.layout.haskell.HaskellParser;
 import org.spoofax.jsglr.tests.result.FileResult;
-import org.spoofax.jsglr_layout.shared.SGLRException;
-import org.spoofax.jsglr_layout.tests.haskell.HaskellParser;
-import org.spoofax.jsglr_orig.io.FileTools;
+import org.spoofax.jsglr.shared.SGLRException;
+import org.spoofax.jsglr.client.SGLR;
+import org.spoofax.jsglr.io.FileTools;
 import org.spoofax.terms.Term;
 import org.strategoxt.lang.Context;
+import org.strategoxt.lang.compat.sglr.SGLRCompatLibrary;
 import org.sugarj.haskell.normalize.normalize;
 import org.sugarj.haskell.normalize.normalize_0_0;
 
@@ -40,9 +41,9 @@ public class TestFile extends TestCase {
     compareContext.addOperatorRegistry(new CompareLibrary());
   }
 
-  public HaskellParser newParserOrig = new HaskellParser();
-  public HaskellParser newParserImpl = new HaskellParser();
-  public org.spoofax.jsglr_orig.tests.haskell.HaskellParser oldParser = new org.spoofax.jsglr_orig.tests.haskell.HaskellParser();
+  public HaskellParser newParserOrig = new HaskellParser(true);
+  public HaskellParser newParserImpl = new HaskellParser(true);
+  public HaskellParser oldParser = new HaskellParser(true);
 
   private IStrategoTerm newResultOrig;
   private IStrategoTerm newResultImpl;
@@ -95,7 +96,7 @@ public class TestFile extends TestCase {
     // "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Data.hs";
     // file +=
     // "accelerate/0.12.0.0/accelerate-0.12.0.0/Data/Array/Accelerate/Array/Delayed.hs";
-    // file += "4Blocks/0.2/4Blocks-0.2/Core/Game.hs";
+    // file += "4Blocks/4Blocks-0.2/Core/Game.hs";
     // file += "zeno/0.2.0.1/zeno-0.2.0.1/src/Main.hs";
     // file += "activehs/0.3/activehs-0.3/Main.hs";
     // file +=
@@ -121,9 +122,11 @@ public class TestFile extends TestCase {
     // file += "array-utils/array-utils-0.3/Data/Array/Util.hs";
     // file += "base/base-4.5.0.0/GHC/IO/Handle/Types.hs";
     //file += "grapefruit-examples/grapefruit-examples-0.1.0.2/src/Examples/Grapefruit/Simple.hs";
-    //file += "apelsin/apelsin-1.2/src/Toolbar.hs";
-    file = "/Users/moritzlichter/Desktop/Stmts.hs";
+   // file += "apelsin/apelsin-1.2/src/Toolbar.hs";
+  //  file = "/Users/moritzlichter/Desktop/Stmts.hs";
     
+  ///  file = "/Users/moritzlichter/Desktop/Haskell/GADTs.hs";
+    file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTests.hs";
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -195,10 +198,10 @@ public class TestFile extends TestCase {
 
   private File prepareFile(String pkg, File f) throws IOException {
     try {
-      File fnorm = new File(f.getAbsolutePath() + ".norm.hs");
-      DeleteUnicode.deleteUnicode(f.getAbsolutePath(), fnorm.getAbsolutePath());
-      File fpp = preprocess(fnorm, pkg);
-      Utilities.deleteFile(fnorm);
+     // File fnorm = new File(f.getAbsolutePath() + ".norm.hs");
+     // DeleteUnicode.deleteUnicode(f.getAbsolutePath(), fnorm.getAbsolutePath());
+      File fpp = preprocess(f, pkg);
+     // Utilities.deleteFile(fnorm);
       return fpp;
     } catch (OutOfMemoryError e) {
       e = null;
@@ -244,7 +247,7 @@ public class TestFile extends TestCase {
       result.outOfMemory.t1 = true;
       ;
     } catch (ExecutionException e) {
-      if (e.getCause() instanceof org.spoofax.jsglr_orig.shared.SGLRException) {
+      if (e.getCause() instanceof org.spoofax.jsglr.shared.SGLRException) {
         result.parseExceptions.t1 = e.getCause().getMessage();
         if (LOGGING)
           System.out.println(e.getCause().getMessage());
@@ -254,7 +257,7 @@ public class TestFile extends TestCase {
       if (e.getCause() instanceof StackOverflowError && LOGGING)
         e.getCause().printStackTrace();
 
-      if (!(e.getCause() instanceof org.spoofax.jsglr_orig.shared.SGLRException)
+      if (!(e.getCause() instanceof org.spoofax.jsglr.shared.SGLRException)
           && !(e.getCause() instanceof StackOverflowError)) {
         result.otherExceptions.t1 = e.getCause().getMessage();
         if (LOGGING) {
@@ -295,7 +298,7 @@ public class TestFile extends TestCase {
 
     String input;
     try {
-      input = org.spoofax.jsglr_layout.io.FileTools.tryLoadFileAsString(f
+      input =FileTools.tryLoadFileAsString(f
           .getAbsolutePath());
     } catch (OutOfMemoryError e) {
       result.outOfMemory.t2 = true;
@@ -370,7 +373,7 @@ public class TestFile extends TestCase {
 
     String input;
     try {
-      input = org.spoofax.jsglr_layout.io.FileTools.tryLoadFileAsString(f
+      input = FileTools.tryLoadFileAsString(f
           .getAbsolutePath());
     } catch (OutOfMemoryError e) {
       result.outOfMemory.t3 = true;

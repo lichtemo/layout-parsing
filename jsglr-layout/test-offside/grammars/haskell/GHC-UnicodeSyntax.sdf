@@ -1,6 +1,6 @@
 module GHC-UnicodeSyntax
-imports 
+imports Haskell-Operators
 
 exports
   lexical syntax
-    
+    ( ( [\7] ( [\34] [\55] ) ) ) -> ProportionOp 

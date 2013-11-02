@@ -3,6 +3,7 @@ module GHC-GADTs
 imports Haskell-Syntax
 imports GHC-ExistentialQuantification
 imports GHC-KindSignature
+imports Haskell-Operators
 
 exports
 	
@@ -23,7 +24,7 @@ exports
 		Context? Type OptKindSig GADTConstrList Deriving WTFBrackets-> GADTBody
 		Context? Type OptKindSig -> GADTBody {reject}
 	
-		Con+ "::" Context? Type		-> GADTConstr {cons("GADTConstraint")}
+		Con+ ProportionOp Context? Type		-> GADTConstr {ast("GADTConstraint(<1>,<3>,<4>)")}
 		
 	%% Implementation of layout sensitive and layout insensitive 
 	%% GADT Contraints where definitions is analogeos to statment list

@@ -1,18 +1,19 @@
 module Haskell-GHC-Foreign
+imports Haskell-Operators
 exports
   context-free syntax
     "foreign" "import" 
 	Callconv ExtName 
       	UnsafeFlag 
-	VaridNoUnsafe "::" Type  	-> Topdecl {cons("ForeignImport")}
+	VaridNoUnsafe ProportionOp Type  	-> Topdecl {ast("ForeignImport(<1>,<3>)")}
 
     "foreign" "export" 
      	Callconv ExtName 
-      	Varid "::" Type 		-> Topdecl {cons("ForeignExport")}
+      	Varid ProportionOp Type 		-> Topdecl {ast("ForeignExport(<1>,<3>)")}
 
     "foreign" "label" 
 	ExtName 
-	Varid "::" Type 		-> Topdecl {cons("ForeignLabel")}
+	Varid ProportionOp Type 		-> Topdecl {ast("ForeignLabel(<1>,<3>)")}
 
   context-free syntax
     VARID 				-> Ccallid

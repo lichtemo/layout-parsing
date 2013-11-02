@@ -2,6 +2,7 @@ module Haskell-Expressions
 
 imports
 	Haskell-Identifier-Sorts
+	Haskell-Operators
 	
 exports
   context-free syntax
@@ -45,7 +46,7 @@ exports
   > {Exp Qop Exp -> Exp {cons("OpApp"), right}
   	 
   	}
-  > Exp "::" CType -> Exp {cons("Typed")}
+  > Exp ProportionOp CType -> Exp {ast("Typed(<1>,<3>)")}
 
 
   context-free syntax
@@ -87,7 +88,7 @@ exports
     }
  
    context-free priorities
-    Exp "::" CType -> Exp
+    Exp ProportionOp CType -> Exp
   .> {
    "\\" Fargs "->" Exp -> Exp
      "let" Declbinds "in" Exp -> Exp

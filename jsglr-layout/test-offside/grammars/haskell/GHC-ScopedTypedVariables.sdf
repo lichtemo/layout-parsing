@@ -3,9 +3,10 @@ module GHC-ScopedTypedVariables
 imports
 	Haskell-Signature-Declarations
 	Haskell-Patterns
+	Haskell-Operators
 	
 exports
 	context-free syntax
 		
-		APat "::" CType -> Pat {cons("TypeSignaturePattern")}
+		APat ProportionOp CType -> Pat {ast("TypeSignaturePattern(<1>,<3>)")}
 	

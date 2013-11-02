@@ -1,9 +1,10 @@
 module Haskell-Signature-Declarations
 
 imports Haskell-Syntax
+imports Haskell-Operators
 
 exports
   context-free syntax
     Signdecl 	   -> Decl 
-    Vars "::" CType -> Signdecl {cons("SignDecl")}
+    Vars ProportionOp CType -> Signdecl {ast("SignDecl(<1>,<3>)")}
    

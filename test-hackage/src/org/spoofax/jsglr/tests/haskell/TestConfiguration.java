@@ -50,6 +50,7 @@ public class TestConfiguration {
     HASKELL_EXTENSIONS.add("StandaloneDeriving");
     HASKELL_EXTENSIONS.add("TupleSections");
     HASKELL_EXTENSIONS.add("RecordWildCards");
+    HASKELL_EXTENSIONS.add("UnicodeSyntax");
     
     HASKELL_EXTENSIONS.add("ExplicitForAll");
     HASKELL_EXTENSIONS.add("PolymorphicComponents");

@@ -1,7 +1,9 @@
 module GHC-UnicodeSyntax
 
-imports
+imports Haskell-Operators
 
 exports
 
 	lexical syntax
+		"∷"		-> ProportionOp
+	

@@ -13,7 +13,6 @@ import junit.framework.TestCase;
 
 import org.spoofax.jsglr.tests.result.FileResult;
 import org.spoofax.jsglr.tests.result.FileResultObserver;
-import org.spoofax.jsglr_layout.client.indentation.LayoutFilter;
 
 /**
  * @author Sebastian Erdweg <seba at informatik uni-marburg de>

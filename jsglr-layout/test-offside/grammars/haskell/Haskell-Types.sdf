@@ -4,7 +4,8 @@ imports Haskell-Identifier-Sorts
 
 exports
   context-free syntax
-    ("::" Type)?   	   -> OptSig
+	ProportionOp Type		-> OptSigH {ast("<2>")}
+	OptSigH?				-> OptSig 
 
   context-free syntax
     Qtycon 	   	   -> Gtycon

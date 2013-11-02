@@ -82,7 +82,7 @@ context-free priorities
       
 	context-free syntax
  		"let" Declbinds -> ArrStmt {cons("ArrLetStmt")}
-		Pat BindOp ArrCommand -> ArrStmt {cons("ArrBindStmt")}
+		Pat LeftArrowOp ArrCommand -> ArrStmt {cons("ArrBindStmt")}
 		ArrCommand -> ArrStmt {cons("ArrCmdStmt")}
 
 	context-free syntax
