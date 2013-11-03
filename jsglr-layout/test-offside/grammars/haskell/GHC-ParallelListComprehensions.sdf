@@ -5,13 +5,13 @@ imports
 exports
 	
 	context-free syntax
-		Quals GuardSymbol Quals -> PQuals
-  		PQuals GuardSymbol Quals -> PQuals
+		Quals GuardSymbol Quals -> PQuals {ast("ParallelQual(<1>,<3>)")}
+  		PQuals GuardSymbol Quals -> PQuals{ast("ParallelQualSeq(<1>,<3>)")}
   		
   	context-free syntax
   	
   		PQuals -> ParallelQuals {cons("ParallelQuals")}
   
   	context-free syntax
-  		Exp GuardSymbol ParallelQuals -> List
+  		Exp GuardSymbol ParallelQuals -> List {ast("ParallelQualList(<1>,<3>)")}
     

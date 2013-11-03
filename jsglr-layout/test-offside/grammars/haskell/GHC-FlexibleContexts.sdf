@@ -3,6 +3,7 @@ module GHC-FlexibleContexts
 imports
 	Haskell-Identifier-Sorts
 	Haskell-Types
+	Haskell-Operators
 
 exports
 	context-free syntax
@@ -39,7 +40,7 @@ exports
     
     %% Definition of the Flexible Content
     
-    	FlexibleClass "=>" 										-> FlexibleContext {cons("FlexibleContext")}
+    	FlexibleClass RightDoubleArrowOp 						-> FlexibleContext {ast("FlexibleContext(<1>)")}
     	%%"(" FlexibleClass "," {FlexibleClass ","}+ ")" "=>" 	-> FlexibleContext {cons("FlexibleContext")}
     
     	FlexibleContext -> SContext {avoid}

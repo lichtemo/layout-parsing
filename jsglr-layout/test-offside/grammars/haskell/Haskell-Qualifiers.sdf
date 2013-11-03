@@ -1,8 +1,9 @@
 module Haskell-Qualifiers
+imports Haskell-Operators
 exports
   context-free syntax
     {Qual ","}+ 	 -> Quals
-    Pat LeftArrowOp Exp 	 -> Qual {cons("QualBind")}
+    Pat LeftArrowOp Exp 	 -> Qual {ast("QualBind(<1>,<3>)")}
     Exp 	      	 -> Qual
     "let" Declbinds   	 -> Qual {cons("QualLet")}
 

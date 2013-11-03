@@ -10,4 +10,4 @@ exports
 		
 		%% Prefer SignaturePattern to ViewPatterns with a typed expression
 		
-		Exp ProportionOp CType "->" Pat -> VPat {reject}
+		Exp ProportionOp CType RightArrowOp Pat -> VPat {reject}

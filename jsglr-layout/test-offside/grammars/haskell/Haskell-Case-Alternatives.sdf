@@ -1,10 +1,11 @@
 module Haskell-Case-Alternatives
+imports Haskell-Operators
 exports
   context-free syntax
-    Pat "->" Exp MaybeWhere 	-> Alt   {cons("Alt")}
+    Pat RightArrowOp Exp MaybeWhere 	-> Alt   {ast("Alt(<1>,<3>,<4>)")}
 
     Pat Gdpat+ MaybeWhere	 	-> Alt   {cons("GdAlt")}
-    Guards "->" Exp                  -> Gdpat {cons("GdPat")}
+    Guards RightArrowOp Exp                  -> Gdpat {ast("GdPat(<1>,<3>)")}
 
   context-free syntax
   	NoOffsideAltBlock -> AltList {cons("AltList")}

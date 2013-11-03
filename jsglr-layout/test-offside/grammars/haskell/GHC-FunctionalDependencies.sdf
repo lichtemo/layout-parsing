@@ -2,6 +2,7 @@ module GHC-FunctionalDependencies
 
 imports Haskell-Identifier-Sorts
 imports Haskell-Type-Classes
+imports Haskell-Operators
 
 exports
 	
@@ -9,7 +10,7 @@ exports
 		
 		"class" SContext? Tycls Tyvar FunctionalDependencies MaybeWhere 		-> Topdecl {cons("FDClass")}
 	
-		Tyvar+ "->" Tyvar+ 					-> FunctionalDependency {cons("FunctionalDependency")}
+		Tyvar+ RightArrowOp Tyvar+ 					-> FunctionalDependency {ast("FunctionalDependency(<1>,<3>)")}
 		"|" {FunctionalDependency ","}+ 	-> FunctionalDependencies {cons("FunctionalDependencies")}
 	
 	

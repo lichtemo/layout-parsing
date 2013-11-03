@@ -5,11 +5,12 @@ imports Haskell-Syntax
 exports
 
 	context-free syntax
-		"forall" Var+ "."		-> Forall {cons("Forall")}
+		ForallKeyword Var+ "."		-> Forall {ast("Forall(<2>)")}
 		Forall CType -> CType {cons("ExplicitForAll")}
 
 	lexical syntax
-		"forall" -> ReservedId
+		"forall"		-> ForallKeyword
+		ForallKeyword 	-> ReservedId
 		
 	lexical restrictions
-		"forall" -/- [a-zA-Z0-9\'\_]
+		ForallKeyword -/- [a-zA-Z0-9\'\_]

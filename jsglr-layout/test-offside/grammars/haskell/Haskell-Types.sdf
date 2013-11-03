@@ -1,6 +1,7 @@
 module Haskell-Types
 
 imports Haskell-Identifier-Sorts
+		Haskell-Operators
 
 exports
   context-free syntax
@@ -9,7 +10,7 @@ exports
 
   context-free syntax
     Qtycon 	   	   -> Gtycon
-    "(" "->" ")"           -> Gtycon 	{cons("TArrow")}
+    "(" RightArrowOp ")"           -> Gtycon 	{ast("TArrow")}
 
   context-free syntax
     {Type ","}+ 	   -> Types
@@ -27,12 +28,12 @@ exports
     "(" Types2 ")" 	   -> AType 	{cons("TProd")}
 
     AType -> Type
-    Type Type 	   	   -> Type 	{cons("TAppBin"),left}
-    Type "->" Type 	   -> Type 	{cons("TFunBin"),right}
+    Type Type 	   	   		-> Type 	{cons("TAppBin"),left}
+    Type RightArrowOp Type 	-> Type 	{ast("TFunBin(<1>,<3>)"),right}
 
   context-free priorities
     Type Type 	   	   -> Type 
-  > Type "->" Type 	   -> Type
+  > Type RightArrowOp Type 	   -> Type
 
   %% The following productions are syntactic sugar for
   %% [] Type and (,,,) Type ... Type

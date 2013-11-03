@@ -2,20 +2,21 @@ module Haskell-List-Comprehensions
 
 imports
 	Haskell-Patterns
+	Haskell-Operators
 	
 exports
   context-free syntax
     "[" List "]" 	 -> Exp {cons("List")}
     Exp 		 -> List
     Lexps 		 -> List
-    Exp ".." 		 -> List
-    Exp "," Exp ".." 	 -> List
-    Exp ".." Exp 	 -> List
-    Exp "," Exp ".." Exp -> List
+    Exp DoubleDotOp 		 	-> List {ast("ExpList(<1>)")}
+    Exp "," Exp DoubleDotOp 	-> List {ast("DExpList(<1>,<2>)")}
+    Exp DoubleDotOp Exp			-> List {ast("RangeList(<1>,<2>)")}
+    Exp "," Exp DoubleDotOp Exp	-> List {ast("DRangeList(<1>,<2>,<4>)")}
    
     Lexps "," Exp 	 -> Lexps
     Exp "," Exp   	 -> Lexps
     
   context-free syntax
-  	Exp GuardSymbol Quals -> List
+  	Exp GuardSymbol Quals -> List {ast("QualList(<1>,<3>)")}
      

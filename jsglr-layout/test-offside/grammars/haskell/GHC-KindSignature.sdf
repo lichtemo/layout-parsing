@@ -11,7 +11,7 @@ exports
 		"!"				-> AKind {cons("Kind!")}
 		"(" Kind ")"	-> AKind {cons("AKind")}
 		AKind			-> Kind
-		AKind "->" Kind	-> Kind {cons("Kind->")}
+		AKind RightArrowOp Kind	-> Kind {ast("Kind->(<1>,<3>)")}
 		
 		
 		ProportionOp Kind	-> KindSig {ast("KindSignature(<2>)")}

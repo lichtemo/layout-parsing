@@ -86,7 +86,7 @@ exports
     VARSYM 		-> Varsym
 
     QVARSYM 		-> Qvarsym1
-
+    
   context-free syntax
     CONID 		-> Tycon
     Tycon  		-> Qtycon

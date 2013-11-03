@@ -8,11 +8,11 @@ exports
 	
 	context-free syntax
 		
-		GuardSymbol {Guard ","}+			-> Guards {cons("Guards")}
+		GuardSymbol {Guard ","}+			-> Guards {ast("Guards(<2>)")}
 		
 	context-free syntax
 		
-    	Pat LeftArrowOp Exp 				-> Guard {cons("PatternGuard")}  
+    	Pat LeftArrowOp Exp 				-> Guard {ast("PatternGuard(<1>,<3>)")}  
     	"let" Declbinds 			-> Guard {cons("LocalDeclaration")}
     	Exp							-> Guard {cons("ExpGuard")}
     	
