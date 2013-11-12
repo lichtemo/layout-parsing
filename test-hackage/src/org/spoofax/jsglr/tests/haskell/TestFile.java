@@ -31,7 +31,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = true;
+  private final static boolean LOGGING = false;
   private final static boolean CLEAN_FILES = false;
 
   private static Context normalizeContext = normalize.init();
@@ -198,10 +198,10 @@ public class TestFile extends TestCase {
 
   private File prepareFile(String pkg, File f) throws IOException {
     try {
-     // File fnorm = new File(f.getAbsolutePath() + ".norm.hs");
-     // DeleteUnicode.deleteUnicode(f.getAbsolutePath(), fnorm.getAbsolutePath());
+      File fnorm = new File(f.getAbsolutePath() + ".norm.hs");
+      DeleteUnicode.deleteUnicode(f.getAbsolutePath(), fnorm.getAbsolutePath());
       File fpp = preprocess(f, pkg);
-     // Utilities.deleteFile(fnorm);
+      Utilities.deleteFile(fnorm);
       return fpp;
     } catch (OutOfMemoryError e) {
       e = null;
