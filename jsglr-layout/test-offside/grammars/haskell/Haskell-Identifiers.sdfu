@@ -1,0 +1,42 @@
+module Haskell-Identifiers
+
+imports
+	UnicodeBasics
+	
+exports
+  lexical syntax
+	LowerCase | UpperCase | Digit| [\'\_]	-> AnyLetter
+	LowerCase AnyLetter*		-> VARID {longest-match}
+	[\_] AnyLetter+				-> VARID {longest-match}
+	UpperCase AnyLetter*		-> CONID {longest-match}
+    
+    %%[a-z][A-Za-z0-9\'\_]*       -> VARID
+    %%[\_][A-Za-z0-9\'\_]+ 		-> VARID
+    %% [A-Z][A-Za-z0-9\'\_]*      -> CONID
+
+    %% Question: underscore in identifiers according to standard???
+    %% Answer: Underscore, �_�, is treated as a lowercase letter, and can occur wherever a lowercase letter can. However, �_� all by itself is a reserved identifier, used as wild card in patterns.
+
+	[\$]					 	 -> DollarSign
+	DollarSign				 	 -> Symbol		
+    [\!\#\%\&\*\+\.\/]
+    \/ [\<\=\>\?\@\\\^\|\-\~] 	-> Symbol
+    UnicodeSymbol 				-> Symbol
+    UnicodePunctuation			-> Symbol
+
+    Symbol (Symbol | [\:])*   	-> VARSYM {longest-match}
+    [\:] (Symbol | [\:])+     	-> CONSYM {longest-match}
+
+    "="                			-> VARSYM {reject}
+    ReservedOp               	-> VARSYM {reject}
+    ReservedOp               	-> CONSYM {reject}
+    ":" -> CONSOP
+    
+    "<-"					  -> BindOp
+
+  lexical restrictions
+    CONID VARID -/- [A-Za-z0-9\'\_]
+    VARSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+    CONSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+    CONSOP      -/- [\:] \/ [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
+    BindOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]

@@ -7,12 +7,25 @@
 	<property name="strategoxt" value="../../tools/strategoxt.jar" />
 	
 	<target name="compile" >
+		<unicodesdf file="Haskell-Identifiers.sdfu"/>
 		<compile-grammar module="Haskell" />
 		<copy file="Haskell.tbl" tofile="../../../test/org/spoofax/jsglr_layout/tests/haskell/Haskell.tbl" />
 		<copy file="Haskell.tbl" tofile="../../../../jsglr-orig/test/org/spoofax/jsglr_orig/tests/haskell/Haskell.tbl" />
 		<copy file="Haskell.tbl" tofile="../../../bin/org/spoofax/jsglr_layout/tests/haskell/Haskell.tbl" />
 		<copy file="Haskell.tbl" tofile="../../../../jsglr-orig/bin/org/spoofax/jsglr_orig/tests/haskell/Haskell.tbl" />
 	</target>
+	
+	<macrodef name="unicodesdf">
+			<attribute name="file" />
+			<attribute name="encoding" default="UTF-8" />
+			<sequential>
+				<java classpath="${strategoxt};../../../../../jsgrl/org.spoofax.jsglr/bin" classname="org.spoofax.jsglr.unicode.preprocessor.UnicodeSDFPreprocessor" failonerror="true">
+					<arg value="@{file}" />
+					<arg value="@{encoding}" />
+				</java>
+			</sequential>
+	</macrodef>
+	
 	
 	<target name="gen-signature">
 		<compile-signature module="Haskell"/>

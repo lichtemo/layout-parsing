@@ -1,29 +1,34 @@
+
 module Haskell-Identifiers
+imports UnicodeBasics
+
 exports
   lexical syntax
-    [a-z][A-Za-z0-9\'\_]*       -> VARID
-    [\_][A-Za-z0-9\'\_]+ -> VARID
-    [A-Z][A-Za-z0-9\'\_]*       -> CONID
-
-    %% Question: underscore in identifiers according to standard???
-    %% Answer: Underscore, �_�, is treated as a lowercase letter, and can occur wherever a lowercase letter can. However, �_� all by itself is a reserved identifier, used as wild card in patterns.
-
-	[\$]					  -> DollarSign
-	DollarSign				  -> Symbol		
-    [\!\#\%\&\*\+\.\/]
-    \/ [\<\=\>\?\@\\\^\|\-\~] -> Symbol
-    Symbol (Symbol | [\:])*   -> VARSYM
-    [\:] (Symbol | [\:])+     -> CONSYM
-    "="                -> VARSYM {reject}
-    ReservedOp                -> VARSYM {reject}
-    ReservedOp                -> CONSYM {reject}
-    ":" -> CONSOP
-    
-    "<-"					  -> BindOp
+    LowerCase | UpperCase | Digit | ( [\39] | [\95] )                                                   -> AnyLetter  
+    LowerCase AnyLetter*                                                                                -> VARID      {longest-match}
+    ( [\95] ) AnyLetter+                                                                                -> VARID      {longest-match}
+    UpperCase AnyLetter*                                                                                -> CONID      {longest-match}
+    ( [\36] )                                                                                           -> DollarSign 
+    DollarSign                                                                                          -> Symbol     
+    ( [\33] | [\35] | [\37-\38] | [\42-\43] | [\45-\47] | [\60-\64] | [\92] | [\94] | [\124] | [\126] ) -> Symbol     
+    UnicodeSymbol                                                                                       -> Symbol     
+    UnicodePunctuation                                                                                  -> Symbol     
+    Symbol Symbol | ( [\58] )*                                                                          -> VARSYM     {longest-match}
+    ( [\58] ) Symbol | ( [\58] )+                                                                       -> CONSYM     {longest-match}
+    "="                                                                                                 -> VARSYM     {reject}
+    ReservedOp                                                                                          -> VARSYM     {reject}
+    ReservedOp                                                                                          -> CONSYM     {reject}
+    ":"                                                                                                 -> CONSOP     
+    "<-"                                                                                                -> BindOp     
 
   lexical restrictions
-    CONID VARID -/- [A-Za-z0-9\'\_]
-    VARSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
-    CONSYM      -/- [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
-    CONSOP      -/- [\:] \/ [\!\#\$\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~]
-    BindOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+    CONID VARID
+    -/- ( [\39] | ( [\48-\57] | ( [\65-\90] | ( [\95] | [\97-\122] ) ) ) )
+    VARSYM
+    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
+    CONSYM
+    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
+    CONSOP
+    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\58] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) ) )
+    BindOp
+    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
