@@ -4,6 +4,7 @@ imports Haskell-Modules
 imports Haskell-Types
 imports Haskell-Keywords
 imports Haskell-Strings
+imports Haskell-Operators
 
 exports
 	
@@ -13,7 +14,7 @@ exports
 		"import" CallConv Safety FSpec 	-> FDecl {cons("ForeignFunctionImport")}
 		"export" CallConv FSpec 			-> FDecl {cons("ForeignFunctionExport")}
 		
-		FSpecString Var "::" CType	-> FSpec {cons("FSpec")}
+		FSpecString Var ProportionOp CType	-> FSpec {ast("FSpec(<1>,<2>,<4>)")}
 		%% The FSpecString is optional, sp the second production applies exactly on nothing but creates the same AST as the empty string
 		String			-> FSpecString
 		[]*				-> FSpecString {cons("String"), avoid}

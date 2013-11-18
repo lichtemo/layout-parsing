@@ -1,44 +1,42 @@
 module Haskell-Numbers
+imports UnicodeBasics
+
 exports
   lexical syntax
-    [0-9]                -> Digit
-    [0-7]                -> Octit
-    [0-9A-Fa-f]          -> Hexit
+    ( [\48-\55] )                                -> Octit       
+    ( ( [\48-\57] | [\65-\70] | [\97-\102] ) )   -> Hexit       
+    ( [\48] )                                    -> Zero        
+    Zero Digit*                                  -> Decimal     
+    ( [\49-\57] ) Digit*                         -> Decimal     
+    Octit+                                       -> Octal       
+    Hexit+                                       -> Hexadecimal 
+    Decimal                                      -> INTEGER     
+    ( [\48] ) ( ( [\79] | [\111] ) ) Octal       -> INTEGER     
+    ( [\48] ) ( ( [\88] | [\120] ) ) Hexadecimal -> INTEGER     
 
-    [0]                  -> Zero
-    Zero Digit*          -> Decimal
-    [1-9] Digit*         -> Decimal
-    Octit+               -> Octal
-    Hexit+               -> Hexadecimal    
-
-    Decimal              -> INTEGER
-    [0] [Oo] Octal       -> INTEGER
-    [0] [Xx] Hexadecimal -> INTEGER
-  
   lexical restrictions
-    Decimal -/- [0-9]
-    Octal -/- [0-7]
-    Hexadecimal -/- [0-9A-Fa-f]
-    Zero -/- [OoXx]
-    
-  lexical syntax
-  	Decimal "." Decimal -> FLOAT
-  	Decimal Exponent -> RATIONAL
-    Decimal "." Decimal Exponent -> RATIONAL
-    [eE] [\-\+]? Decimal -> Exponent
-    
-  lexical restrictions
-    INTEGER -/- [\.] . [0-9]
-    INTEGER -/- [eE] . [0-9] | [eE] . [\+\-] %% . [0-9] multiple lookahead not supported
-    FLOAT -/- [eE]
+    Decimal -/- [\48-\57]
+    Octal -/- [\48-\55]
+    Hexadecimal -/- ( ( [\48-\57] | ( ( [\65-\70] | [\97-\102] ) ) ) )
+    Zero -/- ( ( [\79] | ( ( [\88] | ( ( [\111] | [\120] ) ) ) ) ) )
 
   lexical syntax
-    [] -> PRIMCHAR
-    [] -> PRIMSTRING
-    [] -> PRIMINTEGER
-    [] -> PRIMFLOAT
-    [] -> PRIMDOUBLE
-    
-    [] -> CLITLIT
-    [] -> UNKNOWN
+    Decimal "." Decimal                                   -> FLOAT    
+    Decimal Exponent                                      -> RATIONAL 
+    Decimal "." Decimal Exponent                          -> RATIONAL 
+    ( ( [\69] | [\101] ) ) ( ( [\43] | [\45] ) )? Decimal -> Exponent 
 
+  lexical restrictions
+    INTEGER -/- [\46] . [\48-\57]
+    INTEGER
+    -/- ( ( ( ( [\69] . [\48-\57] | [\101] . [\48-\57] ) ) | ( ( [\69] . ( ( [\43] | [\45] ) ) | [\101] . ( ( [\43] | [\45] ) ) ) ) ) )
+    FLOAT -/- ( ( [\69] | [\101] ) )
+
+  lexical syntax
+    [] -> PRIMCHAR    
+    [] -> PRIMSTRING  
+    [] -> PRIMINTEGER 
+    [] -> PRIMFLOAT   
+    [] -> PRIMDOUBLE  
+    [] -> CLITLIT     
+    [] -> UNKNOWN     

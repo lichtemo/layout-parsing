@@ -2,6 +2,7 @@ module Haskell-Expressions
 
 imports
 	Haskell-Identifier-Sorts
+	Haskell-Operators
 	
 exports
   context-free syntax
@@ -45,11 +46,11 @@ exports
   > {Exp Qop Exp -> Exp {cons("OpApp"), right}
   	 
   	}
-  > Exp "::" CType -> Exp {cons("Typed")}
+  > Exp ProportionOp CType -> Exp {ast("Typed(<1>,<3>)")}
 
 
   context-free syntax
-   "\\" Fargs "->" Exp -> Exp {cons("Abs"), longest-match}
+   "\\" Fargs RightArrowOp Exp -> Exp {ast("Abs(<1>,<3>)"), longest-match}
     "let" Declbinds "in" Exp -> Exp {cons("Let"), longest-match}
     "if" AnyExp "then" AnyExp "else" Exp -> Exp {cons("If"), longest-match}
     "do" StmtList -> Exp {cons("Do"), longest-match}
@@ -70,7 +71,7 @@ exports
   context-free priorities
    Exp Exp -> Exp {cons("AppBin"),left}
    > {
-        "\\" Fargs "->" Exp -> Exp
+        "\\" Fargs RightArrowOp Exp -> Exp
        "let" Declbinds "in" Exp -> Exp
        "if" AnyExp "then" AnyExp "else" Exp -> Exp
        "case" AnyExp "of" AltList -> Exp
@@ -81,15 +82,15 @@ exports
     Exp Qop Exp -> Exp
   <0>
   > {
-   "\\" Fargs "->" Exp -> Exp
+   "\\" Fargs RightArrowOp Exp -> Exp
      "let" Declbinds "in" Exp -> Exp
      "if" AnyExp "then" AnyExp "else" Exp -> Exp
     }
  
    context-free priorities
-    Exp "::" CType -> Exp
+    Exp ProportionOp CType -> Exp
   .> {
-   "\\" Fargs "->" Exp -> Exp
+   "\\" Fargs RightArrowOp Exp -> Exp
      "let" Declbinds "in" Exp -> Exp
      "if" AnyExp "then" AnyExp "else" Exp -> Exp
     }
@@ -124,3 +125,4 @@ exports
 %%    "(" InfixExp Qop ")" -> AExp {cons("LSection")}
 %%    "(" QopNoNeg InfixExp ")" -> AExp {cons("RSection")}
 %%    Exp LabelBinds -> AExp {cons("Labeled")}
+

@@ -1,0 +1,27 @@
+module Haskell-Operators
+
+imports
+	
+exports
+	
+	lexical syntax
+		"::"		-> ProportionOp
+		"=>"		-> RightDoubleArrowOp
+		"->"		-> RightArrowOp
+		"<-"		-> LeftArrowOp
+		".."		-> DoubleDotOp
+		%% Forall Op is introduced in GHC-ExplicitForAll
+		
+		ProportionOp		-> ReservedOp
+		RightDoubleArrowOp	-> ReservedOp
+		RightArrowOp		-> ReservedOp
+		LeftArrowOp			-> ReservedOp
+		DoubleDotOp			-> ReservedOp
+		
+		
+	lexical restrictions
+    	ProportionOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+    	RightDoubleArrowOp	-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+    	RightArrowOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+    	LeftArrowOp			-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+   		DoubleDotOp			-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]

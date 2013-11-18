@@ -1,6 +1,7 @@
 module Haskell-Import-Export
 
 imports Haskell-Identifier-Sorts
+imports Haskell-Operators
 
 exports
   context-free syntax
@@ -8,12 +9,12 @@ exports
   	Exportlist "," -> Exportlist
     "(" Exportlist ")" 		-> Exports
 
-    Qvar 					-> Export
-    OQtycon 				-> Export
-    OQtycon "(" ".." ")" 	-> Export
-    OQtycon "(" ")" 		-> Export
-    OQtycon "("{Qcname ","}+ ")" -> Export
-    "module" Modid 		-> Export
+    Qvar 							-> Export
+    OQtycon 						-> Export
+    OQtycon "(" DoubleDotOp ")" 	-> Export {ast("<1>")}
+    OQtycon "(" ")" 				-> Export
+    OQtycon "("{Qcname ","}+ ")" 	-> Export
+    "module" Modid 					-> Export
 
     Qvar 			-> Qcname
     Gcon 			-> Qcname

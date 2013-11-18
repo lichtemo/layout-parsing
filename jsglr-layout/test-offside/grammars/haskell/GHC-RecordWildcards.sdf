@@ -3,9 +3,10 @@ module GHC-RecordWildcards
 imports Haskell-Patterns
 imports Haskell-Statements
 imports Haskell-Identifier-Sorts
+imports Haskell-Operators
 
 exports
 	
 	context-free syntax
-   		".." 		 	-> FPat {cons("PatWildcard")}
-    	".." 			-> Fbind	{cons("BindWildcard")}
+   		DoubleDotOp 		 	-> FPat {ast("PatWildcard")}
+    	DoubleDotOp 			-> Fbind	{ast("BindWildcard")}

@@ -30,6 +30,7 @@ imports GHC-Magic-Hash
         GHC-ScopedTypedVars-ViewPatterns
         GHC-Package_SafeImports
         GHC-RecursiveDo
+        GHC-UnicodeSyntax
 exports
   sorts Module
 

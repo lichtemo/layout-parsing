@@ -1,6 +1,7 @@
 module Haskell-Type-Classes
 
 imports Haskell-Identifier-Sorts
+		Haskell-Operators
 
 exports
 	
@@ -14,12 +15,12 @@ exports
     "(" Gtycon Tyvar* ")" -> Inst {cons("InstApp")}
     "(" Tyvar "," {Tyvar ","}+ ")" -> Inst {cons("InstTuple")}
     "[" Tyvar "]" -> Inst {cons("InstList")}
-    "(" Tyvar "->" Tyvar ")" -> Inst {cons("InstArrow")}
+    "(" Tyvar RightArrowOp Tyvar ")" -> Inst {ast("InstArrow(<1>,<3>)")}
     
-    Class "=>"              -> Context {cons("Context")}
-    "(" {Class ","}* ")" "=>"     -> Context {cons("Context")}
-    SimpleClass "=>"              -> SContext {cons("SContext")}
-    "(" {SimpleClass ","}* ")" "=>"     -> SContext {cons("SContext")}
+    Class RightDoubleArrowOp						-> Context {ast("Context(<1>)")}
+    "(" {Class ","}* ")" RightDoubleArrowOp			-> Context {ast("Context(<1>)")}
+    SimpleClass RightDoubleArrowOp					-> SContext {ast("SContext(<1>)")}
+    "(" {SimpleClass ","}* ")" RightDoubleArrowOp	-> SContext {ast("SContext(<1>)")}
 
     
     Qtycls Tyvar -> SimpleClass {cons("SimpleClass")}

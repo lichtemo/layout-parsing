@@ -4,31 +4,29 @@ imports UnicodeBasics
 
 exports
   lexical syntax
-    LowerCase | UpperCase | Digit | ( [\39] | [\95] )                                                   -> AnyLetter  
-    LowerCase AnyLetter*                                                                                -> VARID      {longest-match}
-    ( [\95] ) AnyLetter+                                                                                -> VARID      {longest-match}
-    UpperCase AnyLetter*                                                                                -> CONID      {longest-match}
-    ( [\36] )                                                                                           -> DollarSign 
-    DollarSign                                                                                          -> Symbol     
-    ( [\33] | [\35] | [\37-\38] | [\42-\43] | [\45-\47] | [\60-\64] | [\92] | [\94] | [\124] | [\126] ) -> Symbol     
-    UnicodeSymbol                                                                                       -> Symbol     
-    UnicodePunctuation                                                                                  -> Symbol     
-    Symbol Symbol | ( [\58] )*                                                                          -> VARSYM     {longest-match}
-    ( [\58] ) Symbol | ( [\58] )+                                                                       -> CONSYM     {longest-match}
-    "="                                                                                                 -> VARSYM     {reject}
-    ReservedOp                                                                                          -> VARSYM     {reject}
-    ReservedOp                                                                                          -> CONSYM     {reject}
-    ":"                                                                                                 -> CONSOP     
-    "<-"                                                                                                -> BindOp     
+    LowerCase | UpperCase | Digit | ( ( [\39] | [\95] ) )                                                   -> AnyLetter   
+    LowerCase AnyLetter*                                                                                    -> VARID       {longest-match}
+    ( [\95] ) AnyLetter+                                                                                    -> VARID       {longest-match}
+    UpperCase AnyLetter*                                                                                    -> CONID       {longest-match}
+    ( [\36] )                                                                                               -> DollarSign  
+    DollarSign                                                                                              -> Symbol      
+    ( ( [\33] | [\35] | [\37-\38] | [\42-\43] | [\45-\47] | [\60-\64] | [\92] | [\94] | [\124] | [\126] ) ) -> Symbol      
+    UnicodeSymbol                                                                                           -> Symbol      
+    UnicodePunctuation                                                                                      -> Symbol      
+    Symbol | ( [\58] )                                                                                      -> SymbolOrDot 
+    Symbol SymbolOrDot*                                                                                     -> VARSYM      {longest-match}
+    ( [\58] ) SymbolOrDot+                                                                                  -> CONSYM      {longest-match}
+    "="                                                                                                     -> VARSYM      {reject}
+    ReservedOp                                                                                              -> VARSYM      {reject}
+    ReservedOp                                                                                              -> CONSYM      {reject}
+    ":"                                                                                                     -> CONSOP      
 
   lexical restrictions
     CONID VARID
-    -/- ( [\39] | ( [\48-\57] | ( [\65-\90] | ( [\95] | [\97-\122] ) ) ) )
+    -/- ( ( [\39] | ( ( [\48-\57] | ( ( [\65-\90] | ( ( [\95] | [\97-\122] ) ) ) ) ) ) ) )
     VARSYM
-    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
+    -/- ( ( [\33] | ( ( [\35-\38] | ( ( [\42-\43] | ( ( [\45-\47] | ( ( [\60-\64] | ( ( [\92] | ( ( [\94] | ( ( [\124] | [\126] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
     CONSYM
-    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
+    -/- ( ( [\33] | ( ( [\35-\38] | ( ( [\42-\43] | ( ( [\45-\47] | ( ( [\60-\64] | ( ( [\92] | ( ( [\94] | ( ( [\124] | [\126] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )
     CONSOP
-    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\58] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) ) )
-    BindOp
-    -/- ( [\33] | ( [\35-\38] | ( [\42-\43] | ( [\45-\47] | ( [\60-\64] | ( [\92] | ( [\94] | ( [\124] | [\126] ) ) ) ) ) ) ) )
+    -/- ( ( [\33] | ( ( [\35-\38] | ( ( [\42-\43] | ( ( [\45-\47] | ( ( [\58] | ( ( [\60-\64] | ( ( [\92] | ( ( [\94] | ( ( [\124] | [\126] ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) ) )

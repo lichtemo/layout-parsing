@@ -13,7 +13,6 @@ import junit.framework.TestCase;
 
 import org.spoofax.jsglr.tests.result.FileResult;
 import org.spoofax.jsglr.tests.result.FileResultObserver;
-import org.spoofax.jsglr_layout.client.indentation.LayoutFilter;
 
 /**
  * @author Sebastian Erdweg <seba at informatik uni-marburg de>
@@ -25,7 +24,8 @@ public class TestAllPackages extends TestCase {
   private File csvFile;
 
   private int warmupCount = 0;
-  private static final int NUM_THREADS = 4;
+  private static final int NUM_THREADS = 2;
+  private static final boolean WARMUP = false;
 
   public void warmup() throws IOException {
     String[] warmupPackages = new String[] { "matlab", "matrix-market",
@@ -56,7 +56,9 @@ public class TestAllPackages extends TestCase {
     csvFile = new File(path + ".csv");
     new FileResult().writeCSVHeader(csvFile.getAbsolutePath());
 
-    warmup();
+    if (WARMUP) {
+      warmup();
+    }
 
     BufferedReader in = null;
 
@@ -143,7 +145,9 @@ public class TestAllPackages extends TestCase {
     TestAllPackages tester = new TestAllPackages();
     int repetition = args.length > 0 ? Integer.parseInt(args[0]) : 1;
 
-    tester.warmup();
+    if (WARMUP) {
+      tester.warmup();
+    }
 
     for (int i = 0; i < repetition; i++)
       tester.testAllPackages();

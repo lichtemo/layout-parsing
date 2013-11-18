@@ -1,0 +1,12 @@
+module GHC-UnicodeSyntax
+imports Haskell-Operators
+
+exports
+  lexical syntax
+    ( ( [\7] ( [\34] [\55] ) ) )  -> ProportionOp       
+    ( ( [\7] ( [\33] [\144] ) ) ) -> LeftArrowOp        
+    ( ( [\7] ( [\33] [\146] ) ) ) -> RightArrowOp       
+    ( ( [\7] ( [\33] [\210] ) ) ) -> RightDoubleArrowOp 
+    ( ( [\7] ( [\34] [\239] ) ) ) -> DoubleDotOp        
+    ( ( [\7] ( [\34] [\0] ) ) )   -> ForallKeyword      
+    ForallKeyword                 -> ReservedOp         

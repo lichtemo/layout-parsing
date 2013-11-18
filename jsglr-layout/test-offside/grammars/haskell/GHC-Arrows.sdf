@@ -3,18 +3,19 @@ module GHC-Arrows
 imports Haskell-Expressions
 imports Haskell-Patterns
 imports Haskell-Statements
+imports Haskell-Operators
 
 exports
 	
 
 
 context-free syntax
-  "proc" APat "->" ArrCommand -> Exp {cons("ArrProcedure")}
+  "proc" APat RightArrowOp ArrCommand -> Exp {ast("ArrProcedure(<1>,<3>)")}
 
   Exp "-<" Exp -> ArrCommand {cons("ArrFirst")}
   Exp "-<<" Exp -> ArrCommand {cons("ArrHigher")}
   
-  "\\" Fargs "->" ArrCommand -> ArrCommand {cons("ArrAbs")}
+  "\\" Fargs RightArrowOp ArrCommand -> ArrCommand {ast("ArrAbs(<1>,<3>)")}
   "let" Declbinds "in" ArrCommand -> ArrCommand {cons("ArrLet")} 
   "if" Exp "then" ArrCommand "else" ArrCommand -> ArrCommand {cons("ArrIf")}
   "case" Exp "of" ArrAltList -> ArrCommand	{cons("ArrCase"), longest-match}
@@ -33,7 +34,7 @@ context-free priorities
 context-free priorities
     ArrCommand Exp -> ArrCommand
   	> {
-        "\\" Fargs "->" ArrCommand -> ArrCommand
+        "\\" Fargs RightArrowOp ArrCommand -> ArrCommand
         "let" Declbinds "in" ArrCommand -> ArrCommand 
         "if" Exp "then" ArrCommand "else" ArrCommand -> ArrCommand
         "case" Exp "of" AltList -> ArrCommand
@@ -47,7 +48,7 @@ context-free priorities
     ArrCommand Qop ArrCommand -> ArrCommand
   <0>
   	> {
-        "\\" Fargs "->" ArrCommand -> ArrCommand
+        "\\" Fargs RightArrowOp ArrCommand -> ArrCommand
         "let" Declbinds "in" ArrCommand -> ArrCommand 
         "if" Exp "then" ArrCommand "else" ArrCommand -> ArrCommand
     }
@@ -56,7 +57,7 @@ context-free priorities
   	Exp Exp -> Exp
   	> 
       {
-        "proc" APat "->" ArrCommand -> Exp {cons("ArrProcedure")}
+        "proc" APat RightArrowOp ArrCommand -> Exp {ast("ArrProcedure(<1>,<3>)")}
         Exp "-<" Exp -> ArrCommand
         Exp "-<<" Exp -> ArrCommand
       }
@@ -64,7 +65,7 @@ context-free priorities
 context-free priorities
     Exp Qop Exp -> Exp
   	<0> >
-    "proc" APat "->" ArrCommand -> Exp {cons("ArrProcedure")}
+    "proc" APat RightArrowOp ArrCommand -> Exp {ast("ArrProcedure(<1>,<3>)")}
 
 context-free priorities
       {
@@ -73,7 +74,7 @@ context-free priorities
       }
     <0>
   	> {
-        "\\" Fargs "->" Exp -> Exp
+        "\\" Fargs RightArrowOp Exp -> Exp
        "let" Declbinds "in" Exp -> Exp 
        "if" AnyExp "then" AnyExp "else" Exp -> Exp
        "do" StmtList -> Exp {cons("Do"), longest-match}
@@ -82,7 +83,7 @@ context-free priorities
       
 	context-free syntax
  		"let" Declbinds -> ArrStmt {cons("ArrLetStmt")}
-		Pat BindOp ArrCommand -> ArrStmt {cons("ArrBindStmt")}
+		Pat LeftArrowOp ArrCommand -> ArrStmt {ast("ArrBindStmt(<1>,<3>)")}
 		ArrCommand -> ArrStmt {cons("ArrCmdStmt")}
 
 	context-free syntax
@@ -99,7 +100,7 @@ context-free priorities
 		ArrImplStmt ArrImplStmtList -> ArrImplStmtList {cons("ArrStmtSeq"), layout("1.first.col == 2.first.col")}
 	
 	context-free syntax
-		Pat "->" ArrCommand MaybeWhere -> ArrAlt {cons("ArrAlt")}
+		Pat RightArrowOp ArrCommand MaybeWhere -> ArrAlt {ast("ArrAlt(<1>,<3>,<4>)")}
 
 	context-free syntax
 		ArrNoOffsideAltBlock -> ArrAltList {cons("AltList")}

@@ -3,10 +3,11 @@ module Haskell-Statements
 imports
 	Haskell-Identifier-Sorts
 	Haskell-Expressions
+	Haskell-Operators
 
 exports
   context-free syntax
-    Pat BindOp Exp 	-> Stmt 	{cons("BindStmt")}
+    Pat LeftArrowOp Exp 	-> Stmt 	{ast("BindStmt(<1>,<3>)")}
     Exp               	-> Stmt 	{cons("ExpStmt")}
     "let" Declbinds   	-> Stmt 	{cons("LetStmt")}
     Qvar "=" Exp 	-> Fbind	{cons("FBind")}

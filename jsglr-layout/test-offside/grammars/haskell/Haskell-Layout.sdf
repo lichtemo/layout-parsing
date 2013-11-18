@@ -1,45 +1,41 @@
+
 module Haskell-Layout
 exports
   lexical syntax
-    WhiteChar                     -> LAYOUT
-    Comment                       -> LAYOUT
-    NComment                      -> LAYOUT
+    WhiteChar                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -> LAYOUT          
+    Comment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -> LAYOUT          
+    NComment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -> LAYOUT          
+    ( ( [\9-\10] | [\13] | [\32] ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  -> WhiteChar       
+    UnicodeWhitespace                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 -> WhiteChar       
+    ( ( [\0-\6] | [\8-\9] | [\11-\12] | [\14-\127] ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                -> AnyNoSymbol     
+    Symbol                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -> AnyNoSymbol     {reject}
+    "--" ( [\45] )*                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -> Dashes          
+    Dashes ( AnyNoSymbol ( ( ( [\0-\6] | [\8-\9] | [\11-\12] | [\14-\127] ) | ( [\7] ( [\0] [\128-\255] ) | ( [\1-\255] [\0-\255] ) ) | ( [\7] ( [\216] [\0] [\220-\254] [\0-\255] ) | ( [\219] [\255] [\223] [\253-\255] ) | ( [\216] [\0] [\255] [\0-\255] ) | ( [\216] [\1-\255] [\0-\255] [\0-\255] ) | ( [\217-\218] [\0-\255] [\0-\255] [\0-\255] ) | ( [\218-\220] [\0-\255] [\0-\255] [\0-\255] ) | ( [\219] [\0] [\0] [\0] ) | ( [\219] [\255] [\224-\255] [\0-\255] ) ) ) )* )? ( ( [\10] | [\13] ) ) | EOF -> Comment         
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      -> EOF             
+    "{-" NCommentContent* "-}"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -> NComment        
+    NCommentText                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      -> NCommentContent 
+    NComment                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -> NCommentContent 
+    L-Char+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -> NCommentText    {longest-match}
+    ( ( ( [\0-\6] | [\8-\44] | [\46-\122] | [\124-\127] ) | ( [\7] ( [\0] [\128-\255] ) | ( [\1-\255] [\0-\255] ) ) | ( [\7] ( [\216] [\0] [\220-\254] [\0-\255] ) | ( [\219] [\255] [\223] [\253-\255] ) | ( [\216] [\0] [\255] [\0-\255] ) | ( [\216] [\1-\255] [\0-\255] [\0-\255] ) | ( [\217-\218] [\0-\255] [\0-\255] [\0-\255] ) | ( [\218-\220] [\0-\255] [\0-\255] [\0-\255] ) | ( [\219] [\0] [\0] [\0] ) | ( [\219] [\255] [\224-\255] [\0-\255] ) ) ) )                                                   -> L-Char          
+    Hyphen                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -> L-Char          
+    CurlyOpen                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -> L-Char          
+    ( [\45] )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         -> Hyphen          
+    ( [\123] )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        -> CurlyOpen       
+    ( ( [\10] | [\13] ) )                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             -> Newline         
+    LAYOUT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            -> NoNewlineLayout 
+    Newline                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           -> NoNewlineLayout {reject}
+    NoNewlineLayout? Newline                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          -> NewLineLayout   
+    NoNewlineLayout? Newline LAYOUT                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   -> NewLineLayout   
 
-    [\ \t\n\r]                      -> WhiteChar
-
-    ~[\n\r] -> AnyNoSymbol
-    Symbol -> AnyNoSymbol {reject}
-    "--" [\-]* -> Dashes
-
-    Dashes (AnyNoSymbol ~[\n\r]*)? ([\r\n] | EOF)    -> Comment
-    -> EOF
-
-    "{-" NCommentContent* "-}" -> NComment
-    NCommentText -> NCommentContent
-    NComment -> NCommentContent
-    L-Char+ -> NCommentText
-
-    ~[\-\{]                       -> L-Char
-    Hyphen                        -> L-Char
-    CurlyOpen                     -> L-Char
-    [\-]                          -> Hyphen
-    [\{]	                  -> CurlyOpen
-    
-    [\r\n] -> Newline
-    LAYOUT -> NoNewlineLayout
-    Newline -> NoNewlineLayout {reject}
-    
-    NoNewlineLayout? Newline -> NewLineLayout
-    NoNewlineLayout? Newline LAYOUT -> NewLineLayout
-    
   lexical restrictions
-  	Dashes -/- [\-]
-    Hyphen    -/- [\}]
-    CurlyOpen -/- [\-]
-    EOF -/- ~[]
-    NewLineLayout -/- [\r\n\t\ ]
-    NCommentText -/- ~[\-\{] | [\-].~[\}] | [\{].~[\-]
+    Dashes -/- [\45]
+    Hyphen -/- [\125]
+    CurlyOpen -/- [\45]
+    EOF -/- ( ( [\0-\6] | [\8-\127] ) )
+    NewLineLayout -/- ( ( [\9-\10] | ( ( [\13] | [\32] ) ) ) )
+    NCommentText
+    -/- ( ( ( ( [\0-\6] | ( ( [\8-\44] | ( ( [\46-\122] | [\124-\127] ) ) ) ) ) ) | ( ( [\45] . ( ( [\0-\6] | ( ( [\8-\124] | [\126-\127] ) ) ) ) | [\123] . ( ( [\0-\6] | ( ( [\8-\44] | [\46-\127] ) ) ) ) ) ) ) )
 
   context-free restrictions
-    LAYOUT? -/- [\ \t\n\r] | [\{].[\-] | [\-].[\-]
-  
+    LAYOUT?
+    -/- ( ( ( ( [\9-\10] | ( ( [\13] | [\32] ) ) ) ) | ( ( [\123] . [\45] | [\45] . [\45] ) ) ) )

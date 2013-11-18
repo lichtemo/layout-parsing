@@ -1,0 +1,15 @@
+module GHC-UnicodeSyntax
+
+imports Haskell-Operators
+
+exports
+
+	lexical syntax
+		"∷"		-> ProportionOp
+		"←"		-> LeftArrowOp
+		"→"		-> RightArrowOp
+		"⇒"		-> RightDoubleArrowOp
+		"⋯"		-> DoubleDotOp
+		"∀"		-> ForallKeyword
+		
+		ForallKeyword	-> ReservedOp
