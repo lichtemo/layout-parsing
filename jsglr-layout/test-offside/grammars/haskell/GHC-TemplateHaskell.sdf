@@ -28,9 +28,9 @@ exports
     NameQuotation -> Exp {cons("NameQuotation")}
 
   syntax
-    <"'"-LEX> <Qvar-CF> | <Qcon-CF>     -> <NameQuotation-CF> 
-    <"''"-LEX> <Tyvar-CF> | <Gtycon-CF> -> <NameQuotation-CF> 
-    <"'"-LEX> CharChar <"'"-LEX>        -> <NameQuotation-CF> {reject}
+    <"'"-LEX> ( <Qvar-CF> | <Qcon-CF> )     -> <NameQuotation-CF> 
+    <"''"-LEX> ( <Tyvar-CF> | <Gtycon-CF> ) -> <NameQuotation-CF> 
+    <"'"-LEX> CharChar <"'"-LEX>            -> <NameQuotation-CF> {reject}
 
   syntax
     "[" <VARID-LEX> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
@@ -39,10 +39,10 @@ exports
     QuasiQuote -> Exp 
 
   lexical syntax
-    QuasiQuoteChar*                                                                                                                                                                                                                                                                                                                                                                                                                                     -> QuasiQuoteString 
-    ( ( ( [\0-\6] | [\8-\123] | [\125-\127] ) | ( [\7] ( [\0] [\128-\255] ) | ( [\1-\255] [\0-\255] ) ) | ( [\7] ( [\216] [\0] [\220-\254] [\0-\255] ) | ( [\219] [\255] [\223] [\253-\255] ) | ( [\216] [\0] [\255] [\0-\255] ) | ( [\216] [\1-\255] [\0-\255] [\0-\255] ) | ( [\217-\218] [\0-\255] [\0-\255] [\0-\255] ) | ( [\218-\220] [\0-\255] [\0-\255] [\0-\255] ) | ( [\219] [\0] [\0] [\0] ) | ( [\219] [\255] [\224-\255] [\0-\255] ) ) ) ) -> QuasiQuoteChar   
-    "|"                                                                                                                                                                                                                                                                                                                                                                                                                                                 -> QuasiQuotePipe   
-    QuasiQuotePipe                                                                                                                                                                                                                                                                                                                                                                                                                                      -> QuasiQuoteChar   
+    QuasiQuoteChar*                                                                                                                                                                                                                                                                                                                                                                                                -> QuasiQuoteString 
+    ( ( ( [\0-\6] | [\8-\123] | [\125-\127] ) | ( [\7] ( [\0] [\128-\255] ) | ( [\1-\255] [\0-\255] ) ) | ( [\7] ( [\216] [\0] [\220-\254] [\0-\255] ) | ( [\216] [\0] [\255] [\0-\255] ) | ( [\216] [\1-\255] [\0-\255] [\0-\255] ) | ( [\217-\218] [\0-\255] [\0-\255] [\0-\255] ) | ( [\219] [\0-\254] [\0-\255] [\0-\255] ) | ( [\219] [\255] [\0-\222] [\0-\255] ) | ( [\219] [\255] [\223] [\0-\253] ) ) ) ) -> QuasiQuoteChar   
+    "|"                                                                                                                                                                                                                                                                                                                                                                                                            -> QuasiQuotePipe   
+    QuasiQuotePipe                                                                                                                                                                                                                                                                                                                                                                                                 -> QuasiQuoteChar   
 
   lexical restrictions
     QuasiQuotePipe -/- [\93]

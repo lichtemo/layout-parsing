@@ -9,8 +9,9 @@ exports
 		Forall CType -> CType {cons("ExplicitForAll")}
 
 	lexical syntax
-		"forall"		-> ForallKeyword
+		"forall"		-> AsciiForallKeyword
+		AsciiForallKeyword -> ForallKeyword
 		ForallKeyword 	-> ReservedId
 		
 	lexical restrictions
-		ForallKeyword -/- [a-zA-Z0-9\'\_]
+		AsciiForallKeyword -/- [a-zA-Z0-9\'\_]

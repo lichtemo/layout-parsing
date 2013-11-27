@@ -17,22 +17,31 @@ public class TestPackage extends TestCase {
   private final static boolean LOGGING = true;
   
   private final static Pattern SOURCE_FILE_PATTERN = Pattern.compile(".*\\.hs");
+  private static final String BASE_DIR = "/Users/moritzlichter/Desktop/UnicodeFiles/";//"hackage-data/";
   
   private File csvFile;
   private FileResultObserver observer;
   
+
+  private static final Object lock = new Object();
+  private static int numFilesSuccessfully = 0;
+  private static int numFilesNotSuccessfully = 0;
+  
   public void testPackage() throws IOException {
-    testPackage("AC-MiniTest", new FileResultObserver() { public void observe(FileResult result) { } });
+    testPackage("Package", new FileResultObserver() { public void observe(FileResult result) { } });
     System.out.println(csvFile.getAbsolutePath());
   }
   
   public void testPackage(String pkg, FileResultObserver observer) throws IOException {
     if (LOGGING)
       System.out.println(pkg + " starting");
-    
     this.observer = observer;
     
-    File dir = new File("hackage-data/" + pkg);
+    File dir = new File(BASE_DIR + pkg);
+    // Only do something if the package exists
+    if (!dir.exists()) {
+      return;
+    }
     csvFile = new File(dir + ".csv");
     try {
       new FileResult().writeCSVHeader(csvFile.getAbsolutePath());
@@ -42,7 +51,9 @@ public class TestPackage extends TestCase {
     testFiles(dir, "", pkg);
     
     if (LOGGING)
-      System.out.println(pkg + " done");
+      synchronized (lock) {
+        System.out.println(pkg + " done. Accumulated: " + numFilesSuccessfully + " success, " + numFilesNotSuccessfully + " failed.");
+      }
     
   }
   
@@ -52,6 +63,7 @@ public class TestPackage extends TestCase {
       result.appendAsCSV(csvFile.getAbsolutePath());
     } catch (IOException e) {
       e.printStackTrace();
+      throw e;
     }
   }
   
@@ -59,7 +71,27 @@ public class TestPackage extends TestCase {
     if (dir != null && dir.listFiles() != null)
       for (File f : dir.listFiles())
         if (f.isFile() && SOURCE_FILE_PATTERN.matcher(f.getName()).matches()) {
-          logResult(new TestFile().testFile(f, Utilities.extendPath(path, f.getName()), pkg));
+          FileResult result;
+          try {
+            result = new TestFile().testFile(f, Utilities.extendPath(path, f.getName()), pkg);
+            logResult(result);
+            synchronized (lock) {
+              numFilesSuccessfully ++;
+            }
+          } catch (Exception e) {
+            synchronized (lock) {
+              numFilesNotSuccessfully ++;
+            }
+          //  e.printStackTrace();
+            result = new FileResult();
+            result.pkg = pkg;
+            result.path = path;
+            result.otherExceptions.t1 = e.toString();
+            result.otherExceptions.t2 = e.toString();
+            result.otherExceptions.t3 = e.toString();
+            logResult(result);
+          }
+          
         } else if (f.isDirectory()) {
           testFiles(f, Utilities.extendPath(path, f.getName()), pkg);
         }

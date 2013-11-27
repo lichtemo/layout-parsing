@@ -4,7 +4,7 @@ imports UnicodeBasics
 
 exports
   lexical syntax
-    LowerCase | UpperCase | Digit | ( ( [\39] | [\95] ) )                                                   -> AnyLetter   
+    ( LowerCase | UpperCase | Digit | ( ( [\39] | [\95] ) ) )                                               -> AnyLetter   
     LowerCase AnyLetter*                                                                                    -> VARID       {longest-match}
     ( [\95] ) AnyLetter+                                                                                    -> VARID       {longest-match}
     UpperCase AnyLetter*                                                                                    -> CONID       {longest-match}
@@ -13,7 +13,7 @@ exports
     ( ( [\33] | [\35] | [\37-\38] | [\42-\43] | [\45-\47] | [\60-\64] | [\92] | [\94] | [\124] | [\126] ) ) -> Symbol      
     UnicodeSymbol                                                                                           -> Symbol      
     UnicodePunctuation                                                                                      -> Symbol      
-    Symbol | ( [\58] )                                                                                      -> SymbolOrDot 
+    ( Symbol | ( [\58] ) )                                                                                  -> SymbolOrDot 
     Symbol SymbolOrDot*                                                                                     -> VARSYM      {longest-match}
     ( [\58] ) SymbolOrDot+                                                                                  -> CONSYM      {longest-match}
     "="                                                                                                     -> VARSYM      {reject}

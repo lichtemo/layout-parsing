@@ -9,11 +9,12 @@ exports
     [\ \t\n\r]                      -> WhiteChar
     UnicodeWhitespace				-> WhiteChar
 
-    ~[\n\r] -> AnyNoSymbol
+    ~u[\n\r] -> AnyNoSymbol
     Symbol -> AnyNoSymbol {reject}
     "--" [\-]* -> Dashes
 
-    Dashes (AnyNoSymbol ~u[\n\r]*)? ([\r\n] | EOF)    -> Comment
+	~u[\n\r]* -> AnyWithSymbolList {longest-match}
+    Dashes (AnyNoSymbol AnyWithSymbolList)? ([\r\n] | EOF)    -> Comment
     -> EOF
 
     "{-" NCommentContent* "-}" -> NComment
@@ -39,8 +40,10 @@ exports
     Hyphen    -/- [\}]
     CurlyOpen -/- [\-]
     EOF -/- ~[]
+    EOF -/- [\7]
     NewLineLayout -/- [\r\n\t\ ]
     NCommentText -/- ~[\-\{] | [\-].~[\}] | [\{].~[\-]
+    NCommentText -/- [\7]
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n\r] | [\{].[\-] | [\-].[\-]

@@ -18,7 +18,7 @@ exports
     
     %% CType is a forall type, the explicit forall is defined in the forall extension 
     Type -> CType
-    Context Type -> CType {cons("ImplicitForall")}
+    Context CType -> CType {cons("ImplicitForall")}
     
   context-free syntax
     Gtycon 		   -> AType 	{cons("TCon")}

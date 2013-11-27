@@ -134,7 +134,10 @@ public class TestFile extends TestCase {
     //file += "bitstream/bitstream-0.2.0.1/Data/Bitstream/Fusion.hs";
     //file += "htiled/htiled-0.0.3/src/Data/Tiled/Load.hs";
     //file += "levmar/levmar-1.2.1.1/Numeric/LevMar.hs";
-    file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
+    //file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
+    
+    file = "/Users/moritzlichter/Desktop/UnicodeFiles/EsounD/EsounD-0.2/Sound/EsounD/Controller.hs";
+    
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -346,8 +349,8 @@ public class TestFile extends TestCase {
       }
 
       result.stackOverflow.t2 = e.getCause() instanceof StackOverflowError;
-      // if (e.getCause() instanceof StackOverflowError)
-      // e.getCause().printStackTrace();
+       if (e.getCause() instanceof StackOverflowError && LOGGING)
+       e.getCause().printStackTrace();
 
       if (!(e.getCause() instanceof SGLRException)
           && !(e.getCause() instanceof StackOverflowError))
@@ -499,7 +502,12 @@ public class TestFile extends TestCase {
       messages[1] = (String[]) result[2];
     } catch (ExecutionError e) {
       // e.printStackTrace();
+      if (e.getMessages().length >1) {
       System.out.println(Arrays.toString(e.getMessages()[1]));
+      } else {
+        e.printStackTrace();
+        System.out.println("ExecutionError");
+      }
       messages = e.getMessages();
       return null;
     } finally {
@@ -524,7 +532,8 @@ public class TestFile extends TestCase {
     CommandExecution.SILENT_EXECUTION = true;
     CommandExecution.SUB_SILENT_EXECUTION = true;
 
-    String[] cmds = new String[] { "ghc", "-E", "-cpp", "-optP-P", "-o",
+    
+    String[] cmds = new String[] { TestConfiguration.GHC_COMMAND, "-E", "-cpp", "-optP-P", "-o",
         res.getAbsolutePath(), f.getAbsolutePath() };
 
     try {

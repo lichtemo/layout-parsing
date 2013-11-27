@@ -114,7 +114,14 @@ public class CommandExecution {
     @Override
     public String toString() {
       // TODO Auto-generated method stub
-      return super.toString() +"\n"+ Arrays.toString(messages[0]) + " " + Arrays.toString(messages[1]);
+      String s = super.toString();
+      if (messages.length > 0) {
+        s+="\n"+ Arrays.toString(messages[0]);
+      }
+      if(messages.length>1) {
+        s+= " " + Arrays.toString(messages[1]);
+      }
+      return s;
     }
   }
 

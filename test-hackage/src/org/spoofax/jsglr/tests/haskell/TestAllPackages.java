@@ -24,8 +24,10 @@ public class TestAllPackages extends TestCase {
   private File csvFile;
 
   private int warmupCount = 0;
-  private static final int NUM_THREADS = 2;
+  private static final int NUM_THREADS = 1;
   private static final boolean WARMUP = false;
+  
+  private static final Object MAIN_CSV_FILE_LOCK = new Object();
 
   public void warmup() throws IOException {
     String[] warmupPackages = new String[] { "matlab", "matrix-market",
@@ -124,6 +126,8 @@ public class TestAllPackages extends TestCase {
 
     System.out.println(csvFile.getAbsolutePath());
   }
+  
+  
 
   private class MyFileResultObserver implements FileResultObserver {
     private File pkgCsv;
@@ -133,8 +137,10 @@ public class TestAllPackages extends TestCase {
       new FileResult().writeCSVHeader(pkgCsv.getAbsolutePath());
     }
 
-    public synchronized void observe(FileResult packageResult) throws IOException {
-      packageResult.appendAsCSV(csvFile.getAbsolutePath());
+    public void observe(FileResult packageResult) throws IOException {
+      synchronized (MAIN_CSV_FILE_LOCK) {
+          packageResult.appendAsCSV(csvFile.getAbsolutePath());
+      }
       packageResult.appendAsCSV(pkgCsv.getAbsolutePath());
 
       // System.out.println(csvFile.getAbsolutePath());
