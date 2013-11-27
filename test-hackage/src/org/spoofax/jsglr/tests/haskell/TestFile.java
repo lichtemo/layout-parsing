@@ -15,6 +15,7 @@ import org.spoofax.jsglr.tests.haskell.CommandExecution.ExecutionError;
 import org.spoofax.jsglr.tests.haskell.compare.CompareAST;
 import org.spoofax.jsglr.tests.haskell.compare.CompareLibrary;
 import org.spoofax.jsglr.tests.haskell.compare.compare_0_0;
+import org.spoofax.jsglr.tests.haskell.compareutils.CompareUtilsLibrary;
 import org.spoofax.jsglr.tests.layout.haskell.HaskellParser;
 import org.spoofax.jsglr.tests.result.FileResult;
 import org.spoofax.jsglr.shared.SGLRException;
@@ -31,7 +32,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = true;
+  private final static boolean LOGGING = false;
   private final static boolean CLEAN_FILES = false;
   private final static boolean FILTER_UNICODE = false;
 
@@ -39,6 +40,7 @@ public class TestFile extends TestCase {
   private static Context compareContext = CompareAST.init();
   static {
     normalizeContext.addOperatorRegistry(new CompareLibrary());
+    normalizeContext.addOperatorRegistry(new CompareUtilsLibrary());
     compareContext.addOperatorRegistry(new CompareLibrary());
   }
 
@@ -136,7 +138,7 @@ public class TestFile extends TestCase {
     //file += "levmar/levmar-1.2.1.1/Numeric/LevMar.hs";
     //file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
     
-    file = "/Users/moritzlichter/Desktop/UnicodeFiles/EsounD/EsounD-0.2/Sound/EsounD/Controller.hs";
+    file = "/Users/moritzlichter/Desktop/UnicodeFiles/HsHyperEstraier/HsHyperEstraier-0.4/examples/HelloWorld.hs";
     
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");

@@ -121,6 +121,10 @@ rules
   norm-char-char : ASCIIEsc("FF") -> CharEsc("f")
   norm-char-char : ASCIIEsc("CR") -> CharEsc("r")
 
+  norm-char-char: DecimalEsc(x)	-> x'
+  where <escapedUnicodeToChar> x => x'
+  
+  escapedUnicodeToChar: x -> <prim("unescapeUnicode",x)>
 
   norm-string-char : Escape(CharEsc("'")) -> "'"
   norm-string-char = norm-char-char
