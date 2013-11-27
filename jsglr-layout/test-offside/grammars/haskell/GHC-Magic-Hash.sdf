@@ -11,10 +11,6 @@ exports
     ( [\95] ) AnyLetter+ ( [\35] )+ -> VARID {longest-match}
     UpperCase AnyLetter* ( [\35] )+ -> CONID {longest-match}
 
-  lexical restrictions
-    VARID -/- [\35]
-    CONID -/- [\35]
-
   lexical syntax
     Decimal                                      -> INTEGER-HASH  
     ( [\48] ) ( ( [\79] | [\111] ) ) Octal       -> INTEGER-HASH  
@@ -35,12 +31,3 @@ exports
     String-HASH  -> Literal 
     Integer-HASH -> Literal 
     Float-HASH   -> Literal 
-
-  lexical restrictions
-    INTEGER -/- [\35]
-    FLOAT -/- [\35]
-    RATIONAL -/- [\35]
-
-  context-free restrictions
-    Char -/- [\35]
-    String -/- [\35]

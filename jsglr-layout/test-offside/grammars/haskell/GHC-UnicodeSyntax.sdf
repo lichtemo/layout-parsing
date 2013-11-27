@@ -3,10 +3,15 @@ imports Haskell-Operators
 
 exports
   lexical syntax
-    ( ( [\7] ( [\34] [\55] ) ) )  -> ProportionOp       
-    ( ( [\7] ( [\33] [\144] ) ) ) -> LeftArrowOp        
-    ( ( [\7] ( [\33] [\146] ) ) ) -> RightArrowOp       
-    ( ( [\7] ( [\33] [\210] ) ) ) -> RightDoubleArrowOp 
-    ( ( [\7] ( [\34] [\239] ) ) ) -> DoubleDotOp        
-    ( ( [\7] ( [\34] [\0] ) ) )   -> ForallKeyword      
-    ForallKeyword                 -> ReservedOp         
+    ( ( [\7] ( [\34] [\55] ) ) )  -> ProportionOp           
+    ( ( [\7] ( [\33] [\144] ) ) ) -> LeftArrowOp            
+    ( ( [\7] ( [\33] [\146] ) ) ) -> RightArrowOp           
+    ( ( [\7] ( [\33] [\210] ) ) ) -> RightDoubleArrowOp     
+    ( ( [\7] ( [\34] [\239] ) ) ) -> DoubleDotOp            
+    ( ( [\7] ( [\33] [\162] ) ) ) -> LeftArrowTailOp        
+    ( ( [\7] ( [\33] [\163] ) ) ) -> RightArrowTailOp       
+    ( ( [\7] ( [\41] [\27] ) ) )  -> DoubleLeftArrowTailOp  
+    ( ( [\7] ( [\41] [\28] ) ) )  -> DoubleRightArrowTailOp 
+    ( ( [\7] ( [\38] [\5] ) ) )   -> BlackStar              
+    ( ( [\7] ( [\34] [\0] ) ) )   -> ForallKeyword          
+    ForallKeyword                 -> ReservedOp             

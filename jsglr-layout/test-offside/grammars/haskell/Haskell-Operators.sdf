@@ -10,18 +10,22 @@ exports
 		"->"		-> RightArrowOp
 		"<-"		-> LeftArrowOp
 		".."		-> DoubleDotOp
+		"*"			-> BlackStar
 		%% Forall Op is introduced in GHC-ExplicitForAll
+		%% Arrow Operators are introduced in GHC-Arrows
 		
 		ProportionOp		-> ReservedOp
 		RightDoubleArrowOp	-> ReservedOp
 		RightArrowOp		-> ReservedOp
 		LeftArrowOp			-> ReservedOp
 		DoubleDotOp			-> ReservedOp
-		
+		%%BackStar is not reserved, e.g. for multiplication
 		
 	lexical restrictions
-    	ProportionOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
-    	RightDoubleArrowOp	-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
-    	RightArrowOp		-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
-    	LeftArrowOp			-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
-   		DoubleDotOp			-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+    	ProportionOp
+    	RightDoubleArrowOp
+    	RightArrowOp
+    	LeftArrowOp
+   		DoubleDotOp
+   		BlackStar			-/- [\!\#\%\&\*\+\.\/] \/ [\<\=\>\?\@\\\^\|\-\~] \/ [\$]
+   		

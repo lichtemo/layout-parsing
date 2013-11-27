@@ -7,11 +7,11 @@ exports
 	
 	context-free syntax
 		
-		"*"		 		-> AKind {cons("Kind*")}
-		"!"				-> AKind {cons("Kind!")}
+		BlackStar 		-> AKind {ast("Kind*()")}
+		"!"				-> AKind {ast("Kind!()")}
 		"(" Kind ")"	-> AKind {cons("AKind")}
 		AKind			-> Kind
-		AKind RightArrowOp Kind	-> Kind {ast("Kind->(<1>,<3>)")}
+		AKind RightArrowOp Kind	-> Kind {ast("KindArrow(<1>,<3>)")}
 		
 		
 		ProportionOp Kind	-> KindSig {ast("KindSignature(<2>)")}
