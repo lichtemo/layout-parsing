@@ -14,7 +14,7 @@ import org.spoofax.jsglr.tests.result.FileResult;
  */
 public class TestDebug extends TestCase {
   
-  private TestFile fileTester = new TestFile();
+  private TestFile fileTester = new TestFile(TestFile.createContexts());
   
   public void test() throws IOException {
     List<String> files = new ArrayList<String>();

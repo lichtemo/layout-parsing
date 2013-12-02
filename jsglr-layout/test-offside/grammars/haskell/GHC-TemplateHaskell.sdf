@@ -12,11 +12,12 @@ exports
     "$(" Exp ")" -> ExpSplice {cons("ExpSplice")}
     VarSpliceID  -> Splice    {cons("VarSplice")}
 
-  lexical syntax
-    "$" Var -> VarSpliceID 
+  syntax
+    <"$"-LEX> <Var-CF> -> <VarSpliceID-CF> 
 
   lexical restrictions
     DollarSign -/- [\40]
+    DollarSign -/- ( ( [\95] | [\97-\122] ) )
 
   context-free syntax
     "[|" Exp "|]"       -> Exp     {cons("ExpQuotation")}
@@ -39,7 +40,7 @@ exports
     QuasiQuote -> Exp 
 
   lexical syntax
-    QuasiQuoteChar*                                                                                                                                                                                                                                                                                                                                                                                                -> QuasiQuoteString 
+    QuasiQuoteChar*                                                                                                                                                                                                                                                                                                                                                                                                -> QuasiQuoteString {longest-match}
     ( ( ( [\0-\6] | [\8-\123] | [\125-\127] ) | ( [\7] ( [\0] [\128-\255] ) | ( [\1-\255] [\0-\255] ) ) | ( [\7] ( [\216] [\0] [\220-\254] [\0-\255] ) | ( [\216] [\0] [\255] [\0-\255] ) | ( [\216] [\1-\255] [\0-\255] [\0-\255] ) | ( [\217-\218] [\0-\255] [\0-\255] [\0-\255] ) | ( [\219] [\0-\254] [\0-\255] [\0-\255] ) | ( [\219] [\255] [\0-\222] [\0-\255] ) | ( [\219] [\255] [\223] [\0-\253] ) ) ) ) -> QuasiQuoteChar   
     "|"                                                                                                                                                                                                                                                                                                                                                                                                            -> QuasiQuotePipe   
     QuasiQuotePipe                                                                                                                                                                                                                                                                                                                                                                                                 -> QuasiQuoteChar   

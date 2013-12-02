@@ -8,8 +8,8 @@ exports
     ( ( [\7] ( [\33] [\146] ) ) ) -> RightArrowOp           
     ( ( [\7] ( [\33] [\210] ) ) ) -> RightDoubleArrowOp     
     ( ( [\7] ( [\34] [\239] ) ) ) -> DoubleDotOp            
-    ( ( [\7] ( [\33] [\162] ) ) ) -> LeftArrowTailOp        
-    ( ( [\7] ( [\33] [\163] ) ) ) -> RightArrowTailOp       
+    ( ( [\7] ( [\41] [\25] ) ) )  -> LeftArrowTailOp        
+    ( ( [\7] ( [\41] [\26] ) ) )  -> RightArrowTailOp       
     ( ( [\7] ( [\41] [\27] ) ) )  -> DoubleLeftArrowTailOp  
     ( ( [\7] ( [\41] [\28] ) ) )  -> DoubleRightArrowTailOp 
     ( ( [\7] ( [\38] [\5] ) ) )   -> BlackStar              

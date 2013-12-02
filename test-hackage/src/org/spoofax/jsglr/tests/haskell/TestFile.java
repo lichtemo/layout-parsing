@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 
 import junit.framework.TestCase;
 
+import org.spoofax.interpreter.core.Pair;
 import org.spoofax.interpreter.terms.IStrategoList;
 import org.spoofax.interpreter.terms.IStrategoTerm;
 import org.spoofax.jsglr.tests.haskell.CommandExecution.ExecutionError;
@@ -35,14 +36,7 @@ public class TestFile extends TestCase {
   private final static boolean LOGGING = false;
   private final static boolean CLEAN_FILES = false;
   private final static boolean FILTER_UNICODE = false;
-
-  private static Context normalizeContext = normalize.init();
-  private static Context compareContext = CompareAST.init();
-  static {
-    normalizeContext.addOperatorRegistry(new CompareLibrary());
-    normalizeContext.addOperatorRegistry(new CompareUtilsLibrary());
-    compareContext.addOperatorRegistry(new CompareLibrary());
-  }
+  private final static boolean RUN_GC = TestAllPackages.NUM_THREADS == 1;
 
   public HaskellParser newParserOrig = new HaskellParser(true);
   public HaskellParser newParserImpl = new HaskellParser(true);
@@ -52,7 +46,24 @@ public class TestFile extends TestCase {
   private IStrategoTerm newResultImpl;
   private IStrategoTerm oldResult;
 
+  private Context normalizeContext;
+  private Context compareContext;
+
   private FileResult result;
+
+  public static Pair<Context, Context> createContexts() {
+    Context normalizeContext = normalize.init();
+    normalizeContext.addOperatorRegistry(new CompareLibrary());
+    normalizeContext.addOperatorRegistry(new CompareUtilsLibrary());
+    Context compareContext = CompareAST.init();
+    compareContext.addOperatorRegistry(new CompareLibrary());
+    return new Pair<Context, Context>(normalizeContext, compareContext);
+  }
+
+  public TestFile(Pair<Context, Context> contexts) {
+    this.normalizeContext = contexts.first;
+    this.compareContext = contexts.second;
+  }
 
   public void testFile_main() throws IOException {
     // src/org/spoofax/jsglr/tests/haskell/main.hs
@@ -131,15 +142,15 @@ public class TestFile extends TestCase {
 
     // / file = "/Users/moritzlichter/Desktop/Haskell/GADTs.hs";
     // file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTests.hs";
-   // file += "BNFC/BNFC-2.4.2.0/ErrM.hs";
-    
-    //file += "bitstream/bitstream-0.2.0.1/Data/Bitstream/Fusion.hs";
-    //file += "htiled/htiled-0.0.3/src/Data/Tiled/Load.hs";
-    //file += "levmar/levmar-1.2.1.1/Numeric/LevMar.hs";
-    //file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
-    
-    file = "/Users/moritzlichter/Desktop/UnicodeFiles/HsHyperEstraier/HsHyperEstraier-0.4/examples/HelloWorld.hs";
-    
+    // file += "BNFC/BNFC-2.4.2.0/ErrM.hs";
+
+    // file += "bitstream/bitstream-0.2.0.1/Data/Bitstream/Fusion.hs";
+    // file += "htiled/htiled-0.0.3/src/Data/Tiled/Load.hs";
+    // file += "levmar/levmar-1.2.1.1/Numeric/LevMar.hs";
+    // file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
+
+    file = "/Users/moritzlichter/Desktop/UnicodeFiles/memoize/memoize-0.3/Data/Function/Memoize/TH.hs";
+
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -183,6 +194,7 @@ public class TestFile extends TestCase {
 
     File implicitLayoutInput = makeImplicitLayout(preparedInput, pkg);
     File explicitLayoutInput = makeExplicitLayout(preparedInput, pkg);
+    // Check whether that is ok
 
     oldParse(explicitLayoutInput, pkg);
     newParseOrig(preparedInput, pkg);
@@ -252,7 +264,9 @@ public class TestFile extends TestCase {
     result.linesOfCode.t1 = input.split("\n").length;
     result.byteSize.t1 = input.getBytes().length;
 
-    System.gc();
+    if (RUN_GC) {
+      System.gc();
+    }
     result.memoryBefore.t1 = Utilities.usedMemory();
 
     try {
@@ -331,7 +345,9 @@ public class TestFile extends TestCase {
     result.linesOfCode.t2 = input.split("\n").length;
     result.byteSize.t2 = input.getBytes().length;
 
-    System.gc();
+    if (RUN_GC) {
+      System.gc();
+    }
 
     try {
       newResultOrig = (IStrategoTerm) newParserOrig.parse(input,
@@ -351,8 +367,8 @@ public class TestFile extends TestCase {
       }
 
       result.stackOverflow.t2 = e.getCause() instanceof StackOverflowError;
-       if (e.getCause() instanceof StackOverflowError && LOGGING)
-       e.getCause().printStackTrace();
+      if (e.getCause() instanceof StackOverflowError && LOGGING)
+        e.getCause().printStackTrace();
 
       if (!(e.getCause() instanceof SGLRException)
           && !(e.getCause() instanceof StackOverflowError))
@@ -405,7 +421,9 @@ public class TestFile extends TestCase {
     result.linesOfCode.t3 = input.split("\n").length;
     result.byteSize.t3 = input.getBytes().length;
 
-    System.gc();
+    if (RUN_GC) {
+      System.gc();
+    }
     result.memoryBefore.t3 = Utilities.usedMemory();
 
     try {
@@ -504,8 +522,8 @@ public class TestFile extends TestCase {
       messages[1] = (String[]) result[2];
     } catch (ExecutionError e) {
       // e.printStackTrace();
-      if (e.getMessages().length >1) {
-      System.out.println(Arrays.toString(e.getMessages()[1]));
+      if (e.getMessages().length > 1) {
+        System.out.println(Arrays.toString(e.getMessages()[1]));
       } else {
         e.printStackTrace();
         System.out.println("ExecutionError");
@@ -534,9 +552,8 @@ public class TestFile extends TestCase {
     CommandExecution.SILENT_EXECUTION = true;
     CommandExecution.SUB_SILENT_EXECUTION = true;
 
-    
-    String[] cmds = new String[] { TestConfiguration.GHC_COMMAND, "-E", "-cpp", "-optP-P", "-o",
-        res.getAbsolutePath(), f.getAbsolutePath() };
+    String[] cmds = new String[] { TestConfiguration.GHC_COMMAND, "-E", "-cpp",
+        "-optP-P", "-o", res.getAbsolutePath(), f.getAbsolutePath() };
 
     try {
       CommandExecution.execute(System.out, System.out, "[" + pkg + ", pp]",

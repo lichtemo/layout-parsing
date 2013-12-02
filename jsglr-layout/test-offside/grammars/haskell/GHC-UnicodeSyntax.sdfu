@@ -10,8 +10,8 @@ exports
 		"→"		-> RightArrowOp
 		"⇒"		-> RightDoubleArrowOp
 		"⋯"		-> DoubleDotOp
-		"↢"		-> LeftArrowTailOp
-		"↣"		-> RightArrowTailOp
+		"⤙"		-> LeftArrowTailOp
+		"⤚"		-> RightArrowTailOp
 		"⤛"		-> DoubleLeftArrowTailOp
 		"⤜"		-> DoubleRightArrowTailOp
 		"★"		-> BlackStar

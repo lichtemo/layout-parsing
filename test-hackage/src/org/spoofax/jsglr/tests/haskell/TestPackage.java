@@ -6,8 +6,10 @@ import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
+import org.spoofax.interpreter.core.Pair;
 import org.spoofax.jsglr.tests.result.FileResult;
 import org.spoofax.jsglr.tests.result.FileResultObserver;
+import org.strategoxt.lang.Context;
 
 /**
  * @author Sebastian Erdweg <seba at informatik uni-marburg de>
@@ -17,7 +19,7 @@ public class TestPackage extends TestCase {
   private final static boolean LOGGING = true;
   
   private final static Pattern SOURCE_FILE_PATTERN = Pattern.compile(".*\\.hs");
-  private static final String BASE_DIR = "/Users/moritzlichter/Desktop/UnicodeFiles/";//"hackage-data/";
+  private static final String BASE_DIR = "hackage-data/";//"/Users/moritzlichter/Desktop/UnicodeFiles/";//
   
   private File csvFile;
   private FileResultObserver observer;
@@ -26,6 +28,12 @@ public class TestPackage extends TestCase {
   private static final Object lock = new Object();
   private static int numFilesSuccessfully = 0;
   private static int numFilesNotSuccessfully = 0;
+  
+  private Pair<Context, Context> contexts;
+  
+  public TestPackage(Pair<Context, Context> contexts) {
+    this.contexts = contexts;
+  }
   
   public void testPackage() throws IOException {
     testPackage("Package", new FileResultObserver() { public void observe(FileResult result) { } });
@@ -52,7 +60,7 @@ public class TestPackage extends TestCase {
     
     if (LOGGING)
       synchronized (lock) {
-        System.out.println(pkg + " done. Accumulated: " + numFilesSuccessfully + " success, " + numFilesNotSuccessfully + " failed.");
+        System.out.println(pkg + " done. Total: " + numFilesSuccessfully + " success, " + numFilesNotSuccessfully + " unexpected exception.");
       }
     
   }
@@ -73,7 +81,7 @@ public class TestPackage extends TestCase {
         if (f.isFile() && SOURCE_FILE_PATTERN.matcher(f.getName()).matches()) {
           FileResult result;
           try {
-            result = new TestFile().testFile(f, Utilities.extendPath(path, f.getName()), pkg);
+            result = new TestFile(this.contexts).testFile(f, Utilities.extendPath(path, f.getName()), pkg);
             logResult(result);
             synchronized (lock) {
               numFilesSuccessfully ++;
@@ -82,7 +90,7 @@ public class TestPackage extends TestCase {
             synchronized (lock) {
               numFilesNotSuccessfully ++;
             }
-          //  e.printStackTrace();
+            e.printStackTrace();
             result = new FileResult();
             result.pkg = pkg;
             result.path = path;

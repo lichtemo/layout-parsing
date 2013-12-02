@@ -11,8 +11,10 @@ import java.util.concurrent.Semaphore;
 
 import junit.framework.TestCase;
 
+import org.spoofax.interpreter.core.Pair;
 import org.spoofax.jsglr.tests.result.FileResult;
 import org.spoofax.jsglr.tests.result.FileResultObserver;
+import org.strategoxt.lang.Context;
 
 /**
  * @author Sebastian Erdweg <seba at informatik uni-marburg de>
@@ -20,13 +22,13 @@ import org.spoofax.jsglr.tests.result.FileResultObserver;
  */
 public class TestAllPackages extends TestCase {
 
-  private File csvDir;
-  private File csvFile;
+  private static File csvDir;
+  private static File csvFile;
 
   private int warmupCount = 0;
-  private static final int NUM_THREADS = 1;
+  public static final int NUM_THREADS = 4;
   private static final boolean WARMUP = false;
-  
+
   private static final Object MAIN_CSV_FILE_LOCK = new Object();
 
   public void warmup() throws IOException {
@@ -40,10 +42,10 @@ public class TestAllPackages extends TestCase {
         warmupCount++;
       }
     };
-
+    Pair<Context, Context> contexts = TestFile.createContexts();
     try {
       for (String pkg : warmupPackages)
-        new TestPackage().testPackage(pkg, observer);
+        new TestPackage(contexts).testPackage(pkg, observer);
     } catch (Throwable e) {
       // e.printStackTrace();
     }
@@ -64,8 +66,10 @@ public class TestAllPackages extends TestCase {
 
     BufferedReader in = null;
 
-    final Semaphore s = new Semaphore(NUM_THREADS);
-    final List<Thread> threads = new LinkedList<Thread>();
+    Pair<Context, Context> contexts;
+    if (NUM_THREADS == 1) {
+      contexts = TestFile.createContexts();
+    }
 
     try {
       int i = 0;
@@ -82,40 +86,15 @@ public class TestAllPackages extends TestCase {
           continue;
         }
         if (NUM_THREADS == 1) {
-          new TestPackage().testPackage(pkg, new MyFileResultObserver(pkg));
+          new TestPackage(contexts).testPackage(pkg, new MyFileResultObserver(
+              pkg));
         } else {
-          
-          s.acquire();
-          final String pkg_name = pkg;
-          Thread t = new Thread() {
-            public void run() {
-              try {
-                new TestPackage().testPackage(pkg_name,
-                    new MyFileResultObserver(pkg_name));
-              } catch (Exception e) {
-                e.printStackTrace();
-              } finally {
-                synchronized(threads) {
-                  threads.remove(this);
-                }
-                s.release();
-              }
-            }
-          };
-          synchronized(threads) {
-          threads.add(t);
-          }
-          t.start();
-         
+
+          new TestThread(pkg).start();
+
         }
       }
-      while(!threads.isEmpty()) {
-        Thread t = null;
-        synchronized(threads) {
-          t = threads.get(0);
-        }
-        t.join();
-      }
+      TestThread.waitForThreads();
 
     } catch (Throwable e) {
       ;
@@ -126,10 +105,87 @@ public class TestAllPackages extends TestCase {
 
     System.out.println(csvFile.getAbsolutePath());
   }
-  
-  
 
-  private class MyFileResultObserver implements FileResultObserver {
+  static class TestThread extends Thread {
+    private static Pair<Context, Context>[] contexts;
+    private static boolean[] used;
+    private static int contextNum = 0;
+    private static List<Thread> threads = Collections
+        .synchronizedList(new LinkedList<Thread>());
+    private static Semaphore s = new Semaphore(NUM_THREADS);
+
+    static {
+      contexts = new Pair[NUM_THREADS];
+      used = new boolean[NUM_THREADS];
+      for (int i = 0; i < NUM_THREADS; i++) {
+        contexts[i] = TestFile.createContexts();
+        used[i] = false;
+      }
+    }
+
+    public static void waitForThreads() throws InterruptedException {
+      while (!threads.isEmpty()) {
+        Thread t = null;
+        t = threads.get(0);
+        t.join();
+      }
+    }
+
+    private String pkgName;
+
+    public TestThread(String pkgName) {
+      this.pkgName = pkgName;
+    }
+
+    private int getFreeIndex() {
+      for (int i = 0; i < NUM_THREADS; i++) {
+        if (!used[i]) {
+          return i;
+        }
+      }
+      throw new Error("No free index");
+    }
+
+    public void start() {
+      try {
+        s.acquire();
+      } catch (InterruptedException e) {
+        throw new RuntimeException(e);
+      }
+      threads.add(this);
+      super.start();
+    }
+
+    public void run() {
+      int contextId;
+      synchronized (contexts) {
+        contextNum++;
+        contextNum = contextNum % NUM_THREADS;
+        contextId = getFreeIndex();
+        if (used[contextId]) {
+          System.err.println("Used context");
+          System.exit(0);
+        }
+        used[contextId] = true;
+      }
+
+      //System.out.println("Using context: " + contextId);
+      try {
+        //new TestPackage(contexts[contextId]).testPackage(pkgName,
+          //  new MyFileResultObserver(pkgName));
+         Thread.sleep(Math.round(Math.random()*1000.f));
+        used[contextId] = false;
+      } catch (Exception e) {
+        e.printStackTrace();
+      } finally {
+        threads.remove(this);
+
+        s.release();
+      }
+    }
+  };
+
+  private static class MyFileResultObserver implements FileResultObserver {
     private File pkgCsv;
 
     private MyFileResultObserver(String pkg) throws IOException {
@@ -139,7 +195,7 @@ public class TestAllPackages extends TestCase {
 
     public void observe(FileResult packageResult) throws IOException {
       synchronized (MAIN_CSV_FILE_LOCK) {
-          packageResult.appendAsCSV(csvFile.getAbsolutePath());
+        packageResult.appendAsCSV(csvFile.getAbsolutePath());
       }
       packageResult.appendAsCSV(pkgCsv.getAbsolutePath());
 

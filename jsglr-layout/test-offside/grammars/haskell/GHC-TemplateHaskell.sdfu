@@ -18,14 +18,15 @@ exports
 		
 		
 		
-	lexical syntax
-		"$" Var -> VarSpliceID
+	syntax
+		<"$"-LEX> <Var-CF> -> <VarSpliceID-CF>
 		
 	lexical restrictions
 		%% Prevent ambiguities between OpApp and ExpSplice:
 		%% Exp1 $(Exp2) should be AppBin(Exp, SpliceExp(ExpSplice(Exp2))) and not
 		%% OpApp (Exp1, $, Exp2), this modifies the parsing result of files which does not use TemplateHaskell!!!
 		DollarSign -/- [\(]
+		DollarSign -/- [a-z\_]  %% Cannot prevent Unicode symbols here ... this will produce ambiguities
 		
 	context-free syntax
 		
@@ -60,7 +61,7 @@ exports
 		
 
 	lexical syntax
- 		QuasiQuoteChar* -> QuasiQuoteString
+ 		QuasiQuoteChar* -> QuasiQuoteString {longest-match}
  		%% any char except the pipe "|"
  		~u[\|] -> QuasiQuoteChar
 

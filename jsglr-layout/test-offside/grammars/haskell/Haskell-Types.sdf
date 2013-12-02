@@ -29,11 +29,11 @@ exports
 
     AType -> Type
     Type Type 	   	   		-> Type 	{cons("TAppBin"),left}
-    Type RightArrowOp Type 	-> Type 	{ast("TFunBin(<1>,<3>)"),right}
+    Type RightArrowOp CType 	-> Type 	{ast("TFunBin(<1>,<3>)"),right}
 
   context-free priorities
     Type Type 	   	   -> Type 
-  > Type RightArrowOp Type 	   -> Type
+  > Type RightArrowOp CType 	   -> Type
 
   %% The following productions are syntactic sugar for
   %% [] Type and (,,,) Type ... Type
