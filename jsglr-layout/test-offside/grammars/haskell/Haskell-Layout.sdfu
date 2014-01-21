@@ -39,11 +39,11 @@ exports
   	Dashes -/- [\-]
     Hyphen    -/- [\}]
     CurlyOpen -/- [\-]
-    EOF -/- ~[]
-    EOF -/- [\7]
+%%  EOF -/- ~[]
+    EOF -/- ~u[]
     NewLineLayout -/- [\r\n\t\ ]
-    NCommentText -/- ~[\-\{] | [\-].~[\}] | [\{].~[\-]
-    NCommentText -/- [\7]
+    NCommentText -/- ~u[\-\{] | [\-].~[\}] | [\{].~[\-]
+%%  NCommentText -/- [\7]
 
   context-free restrictions
     LAYOUT? -/- [\ \t\n\r] | [\{].[\-] | [\-].[\-]

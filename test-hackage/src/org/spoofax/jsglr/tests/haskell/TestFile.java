@@ -33,7 +33,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = false;
+  private final static boolean LOGGING = true;
   private final static boolean CLEAN_FILES = false;
   private final static boolean FILTER_UNICODE = false;
   private final static boolean RUN_GC = TestAllPackages.NUM_THREADS == 1;
@@ -58,6 +58,10 @@ public class TestFile extends TestCase {
     Context compareContext = CompareAST.init();
     compareContext.addOperatorRegistry(new CompareLibrary());
     return new Pair<Context, Context>(normalizeContext, compareContext);
+  }
+  
+  public TestFile() {
+    this(createContexts());
   }
 
   public TestFile(Pair<Context, Context> contexts) {
@@ -149,8 +153,10 @@ public class TestFile extends TestCase {
     // file += "levmar/levmar-1.2.1.1/Numeric/LevMar.hs";
     // file += "ls-usb/ls-usb-0.1.0.11/PrettyDevList.hs";
 
-    file = "/Users/moritzlichter/Desktop/UnicodeFiles/memoize/memoize-0.3/Data/Function/Memoize/TH.hs";
-
+//    file = "/Users/moritzlichter/Desktop/UnicodeFiles/memoize/memoize-0.3/Data/Function/Memoize/TH.hs";
+    //file+= "hspec/hspec-1.1.0/Specs.hs";
+    file = "/Users/moritzlichter/Desktop/Haskell/powerset_unicode.hs";
+    file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTestsOO.hs";
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
