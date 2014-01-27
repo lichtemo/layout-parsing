@@ -33,7 +33,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = true;
+  private final static boolean LOGGING = false;
   private final static boolean CLEAN_FILES = false;
   private final static boolean FILTER_UNICODE = false;
   private final static boolean RUN_GC = TestAllPackages.NUM_THREADS == 1;
@@ -156,7 +156,7 @@ public class TestFile extends TestCase {
 //    file = "/Users/moritzlichter/Desktop/UnicodeFiles/memoize/memoize-0.3/Data/Function/Memoize/TH.hs";
     //file+= "hspec/hspec-1.1.0/Specs.hs";
     file = "/Users/moritzlichter/Desktop/Haskell/powerset_unicode.hs";
-    file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTestsOO.hs";
+    file = "/home/haskellevaluation/UnicodeTestsOO.hs";
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");

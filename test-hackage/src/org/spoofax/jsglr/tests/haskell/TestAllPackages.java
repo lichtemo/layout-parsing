@@ -171,8 +171,8 @@ public class TestAllPackages extends TestCase {
 
       //System.out.println("Using context: " + contextId);
       try {
-        //new TestPackage(contexts[contextId]).testPackage(pkgName,
-          //  new MyFileResultObserver(pkgName));
+        new TestPackage(contexts[contextId]).testPackage(pkgName,
+            new MyFileResultObserver(pkgName));
          Thread.sleep(Math.round(Math.random()*1000.f));
         used[contextId] = false;
       } catch (Exception e) {

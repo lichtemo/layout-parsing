@@ -35,7 +35,7 @@
 			<java  classname="org.spoofax.jsglr.unicode.preprocessor.UnicodeSDFPreprocessor" failonerror="true">
 				<classpath>
 					<pathelement path="${strategoxt}"/>
-					<pathelement location="../../../../../jsgrl/org.spoofax.jsglr/bin"/>
+					<pathelement location="../../../../../jsglr/org.spoofax.jsglr/bin"/>
 					<pathelement location="/Users/moritzlichter/Desktop/libtemplatelang.jar"/>
 				</classpath>
 				<arg value="@{file}" />
