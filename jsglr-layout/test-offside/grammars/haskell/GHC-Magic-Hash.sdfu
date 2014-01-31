@@ -9,9 +9,9 @@ exports
 	UpperCase AnyLetter*[\#]+		-> CONID {longest-match}
   
   %% These restrictions are not ok, for UnboxedTuples eg (#a,b#), where b is not a magic hash, but there is the longest match
-  %% lexical restrictions
-  %%	VARID -/- [\#]
-  %%	CONID -/- [\#]
+   lexical restrictions
+  	VARID -/- [\#]
+  	CONID -/- [\#]
 
   lexical syntax
     Decimal              -> INTEGER-HASH
@@ -37,13 +37,13 @@ exports
    
   %% For the same reason, these are follow restrictions are wrong
   %% There we do not need a longest match because only one # is allowed
-  %%lexical restrictions
-  %%  INTEGER -/- [\#]
-  %%  FLOAT -/- [\#]
-  %%  RATIONAL -/- [\#]
+  lexical restrictions
+    INTEGER -/- [\#]
+    FLOAT -/- [\#]
+    RATIONAL -/- [\#]
     
-  %%context-free restrictions
-  %%  Char -/- [\#]
-  %%  String -/- [\#]
+  context-free restrictions
+    Char -/- [\#]
+    String -/- [\#]
   
   

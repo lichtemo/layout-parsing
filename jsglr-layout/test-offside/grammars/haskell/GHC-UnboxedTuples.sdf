@@ -10,6 +10,7 @@ exports
 		context-free syntax
 			"(#" "#)" 			-> Gtycon	{cons("TUnboxedSingleton")}
 			"(#" ","+ "#)"		-> Gtycon	{cons("TUnboxedList")}
-			"(#" Exps2 "#)"		-> Exp 		{cons("Unboxed")}
-			"(#" {Pat ","}+ "#)"	-> APat  {cons("UnboxedPattern")}
-			"(#" {CType ","}+ "#)"	-> AType {cons("UnboxedType")}
+		%%	"(#" Exps2 "#)"		-> Exp 		{cons("Unboxed")}
+		%%	"(#" {Pat ","}+ "#)"	-> APat  {cons("UnboxedPattern")}
+		%%	"(#" {CType ","}+ "#)"	-> AType {cons("UnboxedType")}
+		"(#" Exps "#)"		-> Exp 		{cons("Unboxed")}
