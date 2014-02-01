@@ -10,8 +10,9 @@ exports
   
   %% These restrictions are not ok, for UnboxedTuples eg (#a,b#), where b is not a magic hash, but there is the longest match
    lexical restrictions
-  	VARID -/- [\#]
-  	CONID -/- [\#]
+    VARID -/- [\#] . ~[\)]
+  	CONID -/- [\#] . ~[\)]
+
 
   lexical syntax
     Decimal              -> INTEGER-HASH
