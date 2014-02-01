@@ -12,8 +12,8 @@ exports
     UpperCase AnyLetter* ( [\35] )+ -> CONID {longest-match}
 
   lexical restrictions
-    VARID -/- [\35]
-    CONID -/- [\35]
+    VARID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
+    CONID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
 
   lexical syntax
     Decimal                                      -> INTEGER-HASH  
