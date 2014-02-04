@@ -39,12 +39,12 @@ exports
   %% For the same reason, these are follow restrictions are wrong
   %% There we do not need a longest match because only one # is allowed
   lexical restrictions
-    INTEGER -/- [\#]
-    FLOAT -/- [\#]
-    RATIONAL -/- [\#]
+    INTEGER -/- [\#]. ~[\)]
+    FLOAT -/- [\#]. ~[\)]
+    RATIONAL -/- [\#]. ~[\)]
     
   context-free restrictions
-    Char -/- [\#]
-    String -/- [\#]
+    Char -/- [\#]. ~[\)]
+    String -/- [\#]. ~[\)]
   
   

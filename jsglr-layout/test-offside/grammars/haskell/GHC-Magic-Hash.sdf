@@ -37,10 +37,10 @@ exports
     Float-HASH   -> Literal 
 
   lexical restrictions
-    INTEGER -/- [\35]
-    FLOAT -/- [\35]
-    RATIONAL -/- [\35]
+    INTEGER -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
+    FLOAT -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
+    RATIONAL -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
 
   context-free restrictions
-    Char -/- [\35]
-    String -/- [\35]
+    Char -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
+    String -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
