@@ -15,6 +15,12 @@ exports
     VARID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
     CONID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
 
+  syntax
+    
+
+  context-free syntax
+    "#" -> Qop {reject}
+
   lexical syntax
     Decimal                                      -> INTEGER-HASH  
     ( [\48] ) ( ( [\79] | [\111] ) ) Octal       -> INTEGER-HASH  

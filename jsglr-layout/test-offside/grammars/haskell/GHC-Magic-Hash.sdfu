@@ -12,7 +12,12 @@ exports
    lexical restrictions
     VARID -/- [\#] . ~[\)]
   	CONID -/- [\#] . ~[\)]
+  	
+  syntax
+  %%	<"("-LEX> <LAYOUT?-CF> <Exp-CF> <"#"-LEX> <")"-LEX> -> <Exp-CF> {reject}
 
+	context-free syntax
+	 "#" -> Qop {reject}
 
   lexical syntax
     Decimal              -> INTEGER-HASH
