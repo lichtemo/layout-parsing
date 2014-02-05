@@ -17,7 +17,8 @@ exports
   %%	<"("-LEX> <LAYOUT?-CF> <Exp-CF> <"#"-LEX> <")"-LEX> -> <Exp-CF> {reject}
 
 	context-free syntax
-	 "#" -> Qop {reject}
+	%% "#" -> Qop {reject}
+	"(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
 
   lexical syntax
     Decimal              -> INTEGER-HASH
