@@ -32,7 +32,8 @@ exports
     
   lexical restrictions
     INTEGER -/- [\.] . [0-9]
-    INTEGER -/- [eE] . [0-9] | [eE] . [\+\-] %% . [0-9] multiple lookahead not supported
+    INTEGER -/- [eE] . [0-9]
+    INTEGER -/- [eE] . [\+\-] %% . [0-9] multiple lookahead not supported
     FLOAT -/- [eE]
 
   lexical syntax

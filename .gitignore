@@ -49,3 +49,4 @@ test-hackage/sample-data/ParallelListComprehensionExample
 test-hackage/sample-data/RelaxedPolyRecExample
 
 test-hackage/sample-data/template-haskell/main
+.Rproj.user

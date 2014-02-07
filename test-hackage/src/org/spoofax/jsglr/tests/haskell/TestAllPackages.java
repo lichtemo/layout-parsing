@@ -26,7 +26,7 @@ public class TestAllPackages extends TestCase {
   private static File csvFile;
 
   private int warmupCount = 0;
-  public static final int NUM_THREADS = 4;
+  public static final int NUM_THREADS = 8;
   private static final boolean WARMUP = false;
 
   private static final Object MAIN_CSV_FILE_LOCK = new Object();
@@ -171,10 +171,8 @@ public class TestAllPackages extends TestCase {
 
       //System.out.println("Using context: " + contextId);
       try {
-      
        new TestPackage(contexts[contextId]).testPackage(pkgName,
             new MyFileResultObserver(pkgName));
-      
         used[contextId] = false;
       } catch (Exception e) {
         e.printStackTrace();

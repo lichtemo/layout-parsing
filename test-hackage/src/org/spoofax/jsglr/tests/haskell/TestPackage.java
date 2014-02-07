@@ -94,7 +94,6 @@ public class TestPackage extends TestCase {
             synchronized (lock) {
               numFilesSuccessfully++;
             }
-            
           } catch (Exception e) {
             synchronized (lock) {
               numFilesNotSuccessfully++;
