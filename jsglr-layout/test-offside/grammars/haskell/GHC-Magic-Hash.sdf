@@ -19,7 +19,7 @@ exports
     
 
   context-free syntax
-    "(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
+    
 
   lexical syntax
     Decimal                                      -> INTEGER-HASH  

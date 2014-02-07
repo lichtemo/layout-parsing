@@ -20,6 +20,7 @@ exports
     DollarSign -/- ( ( [\95] | [\97-\122] ) )
 
   context-free syntax
+    Exp                 -> Topdecl {avoid}
     "[|" Exp "|]"       -> Exp     {cons("ExpQuotation")}
     "[d|" Topdecl+ "|]" -> TopDecl {cons("TopdeclQuotation")}
     "[t|" Type "|]"     -> Type    {cons("TypeQuotation")}
@@ -37,7 +38,9 @@ exports
     "[" <VARID-LEX> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
 
   context-free syntax
-    QuasiQuote -> Exp 
+    QuasiQuote -> Exp   
+    QuasiQuote -> AType 
+    QuasiQuote -> APat  
 
   lexical syntax
     QuasiQuoteChar*                                                                                                                                                                                                                                                                                                                                                                                                -> QuasiQuoteString {longest-match}

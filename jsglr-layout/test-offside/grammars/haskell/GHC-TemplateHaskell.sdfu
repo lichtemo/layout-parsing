@@ -31,7 +31,7 @@ exports
 	context-free syntax
 		
 	%% Impliying slices in Top Level Declarations
-%%		Exp -> Topdecl	
+		Exp -> Topdecl	{avoid}
 		
 %%	Expression Quotations
 		
@@ -58,6 +58,9 @@ exports
 	
 	context-free syntax
 		QuasiQuote 		-> Exp
+		QuasiQuote 		-> AType
+		QuasiQuote		-> APat
+		
 		
 
 	lexical syntax

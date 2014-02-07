@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
+import java.util.regex.Pattern;
 
 import junit.framework.TestCase;
 
@@ -155,8 +156,21 @@ public class TestFile extends TestCase {
 
 //    file = "/Users/moritzlichter/Desktop/UnicodeFiles/memoize/memoize-0.3/Data/Function/Memoize/TH.hs";
     //file+= "hspec/hspec-1.1.0/Specs.hs";
-    file = "/Users/moritzlichter/Desktop/Haskell/powerset_unicode.hs";
-    file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTestsOO.hs";
+   // file = "/Users/moritzlichter/Desktop/Haskell/powerset_unicode.hs";
+   //file = "/Users/moritzlichter/Desktop/Haskell/UnicodeTestsOO.hs";
+   // file += "AC-BuildPlatform/AC-BuildPlatform-1.1.0/Configure/Detect.hs";
+    
+    //file += "accelerate-cuda/accelerate-cuda-0.12.0.0/Data/Array/Accelerate/CUDA/CodeGen/Reduction.hs";
+    //file += "accelerate-io/accelerate-io-0.12.0.0/Data/Array/Accelerate/IO/Repa.hs";
+    //file += "activehs/activehs-0.3/Main.hs";
+   // file += "ad/ad-1.5.0.2/src/Numeric/AD/Internal/Classes.hs";
+    //file += "ADPfusion/ADPfusion-0.0.1.0/ADP/Fusion/Monadic/Internal.hs";
+  //  file += "base/base-4.5.0.0/GHC/Float/RealFracMethods.hs";
+    //file+="compdata/compdata-0.6/src/Data/Comp/Param/Term.hs";
+   // file += "CV/CV-0.3.5.3/CV/Tracking.hs";
+  //  file += "data-category/data-category-0.4.1/Data/Category/Discrete.hs";
+    file += "xhb/xhb-0.5.2012.3.26/Graphics/XHB/Connection/Auth.hs";
+    
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -565,6 +579,7 @@ public class TestFile extends TestCase {
       CommandExecution.execute(System.out, System.out, "[" + pkg + ", pp]",
           cmds);
     } catch (ExecutionError e) {
+      e.printStackTrace();
       if (e.getExitValue() == -1)
         throw e;
 

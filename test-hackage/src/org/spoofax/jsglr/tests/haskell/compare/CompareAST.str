@@ -81,11 +81,16 @@ rules
   concat-funls: (VarFunLHS(o, pats1), pats2) -> VarFunLHS(o, <conc> (pats1, pats2))
   concat-funls: (pat, pats) -> <conc> ([pat], pats) 
   
-  compare-term: (lhs1, lhs2) -> <compare> (<normalize-funls> (lhs1), <normalize-funls> (lhs2))
+  compare-term: (lhs1, lhs2) -> <compare> (norm1, norm2) where
+  	<normalize-funls> (lhs1) => norm1;
+  	<normalize-funls> (lhs2) => norm2;
+  	<not(?true)> (<equal> (lhs1,norm1));
+  	<not(?true)> (<equal> (lhs2,norm2))
 
 	
 rules
 	
+
 	orfold: ([[]|xs])	-> []
 	orfold: ([x])		-> x
 	orfold: ([x|xs])	-> <orfold> (xs)

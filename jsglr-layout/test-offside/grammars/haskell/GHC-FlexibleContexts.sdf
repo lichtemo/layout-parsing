@@ -40,7 +40,7 @@ exports
     
     %% Definition of the Flexible Content
     
-    	FlexibleClass RightDoubleArrowOp 						-> FlexibleContext {ast("FlexibleContext(<1>)")}
+    	{ FlexibleClass ","}+ RightDoubleArrowOp 						-> FlexibleContext {ast("FlexibleContext(<1>)")}
     	%%"(" FlexibleClass "," {FlexibleClass ","}+ ")" "=>" 	-> FlexibleContext {cons("FlexibleContext")}
     
     	FlexibleContext -> SContext {avoid}

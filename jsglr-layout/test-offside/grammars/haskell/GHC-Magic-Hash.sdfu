@@ -18,7 +18,7 @@ exports
 
 	context-free syntax
 	%% "#" -> Qop {reject}
-	"(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
+	%%"(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
 
   lexical syntax
     Decimal              -> INTEGER-HASH

@@ -34,14 +34,15 @@ exports
     "(" Pat ")" -> APat {bracket}
     "(" Pat "," {Pat ","}+ ")" -> APat {cons("Tuple")}
     "[" {Pat ","}+ "]" -> APat {cons("List")}
-    "~" APat -> APat {cons("Irrefutable")}
+    TildeSymbol APat -> APat {ast("Irrefutable(<2>)")}
     
     Qvar "=" Pat -> FPat {cons("PatBind")}
     
   lexical syntax
     "|"	-> GuardSymbol
+    "~" -> TildeSymbol
 
   lexical restrictions
-    "~" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
+    TildeSymbol -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
     "-" -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
     GuardSymbol -/- [\!\#\$\%\&\*\+\.\/\<\=\>\?\@\\\^\|\-\~]
