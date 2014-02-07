@@ -85,7 +85,7 @@ public class TestPackage extends TestCase {
       throws IOException {
     if (dir != null && dir.listFiles() != null) {
       for (File f : dir.listFiles()) {
-        if (f.isFile() && SOURCE_FILE_PATTERN.matcher(f.getName()).matches()) {
+        if (f.isFile() && SOURCE_FILE_PATTERN.matcher(f.getName()).matches() ) {
           FileResult result;
           try {
             result = new TestFile(this.contexts).testFile(f,
@@ -94,8 +94,7 @@ public class TestPackage extends TestCase {
             synchronized (lock) {
               numFilesSuccessfully++;
             }
-            // TODO Remove again
-            return true;
+            
           } catch (Exception e) {
             synchronized (lock) {
               numFilesNotSuccessfully++;

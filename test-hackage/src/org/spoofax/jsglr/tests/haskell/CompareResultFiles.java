@@ -235,11 +235,13 @@ public class CompareResultFiles {
     CompareResultFiles comp = new CompareResultFiles();
 
   //  int id1 = comp.readFolder("all1379944237523");
-    int id2 = comp.readFile("all1380997465516/00all.csv");
-    int id1 = comp.readFile("all1380654578736/00all.csv");
+    //int id2 = comp.readFile("/Users/moritzlichter/Desktop/EvalHaskell/allNew.csv");
+    int id2 ;//= comp.readFile("/Users/moritzlichter/Developer/Java/Eclipse workspaces/HiwiSE/layout-parsing2/test-hackage/all1391507689397.csv");
+    
+    int id1 = comp.readFile("/Users/moritzlichter/Developer/Java/Eclipse workspaces/HiwiSE/layout-parsing2/test-hackage/all1391637565696.csv");
    // int id1 = comp.readFile("all1380654578736/buildbox.csv");
-    /*
-    LinkedList<Pair<FileResult, FileResult>> diff = comp.listFilesDiffParsed(id2, id1);
+    
+  /*  LinkedList<Pair<FileResult, FileResult>> diff = comp.listFilesDiffParsed(id2, id1);
     Collections.sort(diff, new Comparator<Pair<FileResult, FileResult>>() {
 
       @Override
@@ -248,16 +250,24 @@ public class CompareResultFiles {
        return (o1.first.pkg + o1.first.path).compareTo(o2.first.pkg + o2.first.path);
       }
     });
+    int none = 0;
     for (Pair<FileResult, FileResult> p : diff) {
-      if (p.second != null && !p.first.allSuccess && p.first.cppPreprocess) {
+      if (p.second != null ) {
         
         System.out.print(p.first.pkg + " - " + p.first.path + " - "
             + p.first.allSuccess + " - ");
        
           System.out.println(p.second.allSuccess);
-        } 
+        } else {
+       //   System.out.println(p.first.pkg + " - " + p.first.path + " - " + p.first.allSuccess + " NONE");
+          none++;
+        }
       
     }
+    System.out.println("None: " + none);
+    */
+        /*
+    
     LinkedList<FileResult> ambigious = comp.filter(id1, new Filter() {
 
       @Override
@@ -267,22 +277,22 @@ public class CompareResultFiles {
       
     });
     sort(ambigious);
-    print(ambigious,100);
-    /**
-    LinkedList<FileResult> notOk = comp.filter(id2, new Filter() {
+    print(ambigious,100);*/
+    
+    LinkedList<FileResult> notOk = comp.filter(id1, new Filter() {
       
       @Override
       public boolean filter(FileResult r) {
-         return ! r.allSuccess;
+         return  r.cppPreprocess && r.makeExplicitLayout && r.makeImplicitLayout && !r.allSuccess;
       }
     });
     sort(notOk);
-    print(notOk);*/
-    LinkedList<FileResult> diffs2 = comp.listFilesWithImplExplDifference(id2);
+    print(notOk,-1);
+ /*   LinkedList<FileResult> diffs2 = comp.listFilesWithImplExplDifference(id2);
     LinkedList<FileResult> diffs1 = comp.listFilesWithImplExplDifference(id1);
     LinkedList<FileResult> diff = intersectLists(diffs1, diffs2);
     sort(diffs2);
-    print(diffs2,1000);
+    print(diffs2,1000);*/
     
   }
 
