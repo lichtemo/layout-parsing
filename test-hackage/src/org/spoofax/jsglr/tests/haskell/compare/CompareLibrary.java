@@ -8,6 +8,7 @@ import org.spoofax.interpreter.library.AbstractPrimitive;
 import org.spoofax.interpreter.library.AbstractStrategoOperatorRegistry;
 import org.spoofax.interpreter.stratego.Strategy;
 import org.spoofax.interpreter.terms.IStrategoTerm;
+import org.spoofax.jsglr.tests.haskell.compareutils.PrepareQuasiQuotePrimitive;
 import org.spoofax.terms.StrategoInt;
 import org.spoofax.terms.StrategoString;
 
@@ -39,6 +40,8 @@ public class CompareLibrary extends AbstractStrategoOperatorRegistry {
         return true;
       }
     });
+
+    this.add(new PrepareQuasiQuotePrimitive());
   }
 
   @Override

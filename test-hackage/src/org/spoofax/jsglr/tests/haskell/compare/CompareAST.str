@@ -20,6 +20,7 @@ rules
   compare : (c#(xs), c#(ys)) -> <compare> (xs, ys)
   
   compare : (x, y) -> [(x, y)]
+ 
 
 rules
   // programs without module declaration
@@ -86,10 +87,13 @@ rules
   	<normalize-funls> (lhs2) => norm2;
   	<not(?true)> (<equal> (lhs1,norm1));
   	<not(?true)> (<equal> (lhs2,norm2))
+  	
+  compare-term: (QuasiQuote(d1, s1), QuasiQuote(d2,s2)) -> <map(compare);concat>[(d1,d2),(<prepareQuasiQuote>(s1),<prepareQuasiQuote>(s2))]
 
 	
 rules
 	
+	prepareQuasiQuote: q->  <prim("prepareQuasiQuote", q)>
 
 	orfold: ([[]|xs])	-> []
 	orfold: ([x])		-> x
@@ -400,6 +404,8 @@ signature
 	ImplicitForall	  	: Context * Type -> CType
 	TypePrOp			: Op * List(AType) -> Type
 	TypeInfOp			: AType * Op * AType -> Type
+	
+	QuasiQuote: VARID * QuasiQuoteString -> QuasiQuote
 
 
 signature

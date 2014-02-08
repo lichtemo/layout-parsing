@@ -1,7 +1,16 @@
 module GHC-EqualityConstraints
 
+imports
+	Haskell-Types
+
 exports
 	context-free syntax
 
-    	Class "~" Class -> Class 
+    	Class "~" Class -> Class {cons("EqClass"), right}
+    	Type "~" Type	-> Type {cons("EqType"), right}
+    	
+    context-free priorities
+   		  Type Type 	   	   -> Type 
+  		> Type RightArrowOp CType 	   -> Type
+  		> Type "~" Type	-> Type
 		
