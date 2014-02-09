@@ -1,13 +1,15 @@
 module Haskell-Layout
 exports
+
   lexical syntax
     WhiteChar                     -> LAYOUT
     Comment                       -> LAYOUT
     NComment                      -> LAYOUT
     
 
-    [\ \t\n\r]                      -> WhiteChar
-    UnicodeWhitespace				-> WhiteChar
+    [\ \t\n\r]   \/ [ ]                   -> WhiteChar
+    UnicodeWhitespace					-> WhiteChar
+	" "									-> WhiteChar
 
     ~u[\n\r] -> AnyNoSymbol
     Symbol -> AnyNoSymbol {reject}

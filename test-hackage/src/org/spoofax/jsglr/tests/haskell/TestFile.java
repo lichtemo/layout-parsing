@@ -34,7 +34,7 @@ import org.sugarj.haskell.normalize.normalize_0_0;
  */
 public class TestFile extends TestCase {
 
-  private final static boolean LOGGING = false;
+  private final static boolean LOGGING = true;
   private final static boolean CLEAN_FILES = false;
   private final static boolean FILTER_UNICODE = false;
   private final static boolean RUN_GC = TestAllPackages.NUM_THREADS == 1;
@@ -170,7 +170,13 @@ public class TestFile extends TestCase {
     //file+="compdata/compdata-0.6/src/Data/Comp/Param/Term.hs";
    // file += "CV/CV-0.3.5.3/CV/Tracking.hs";
   //  file += "data-category/data-category-0.4.1/Data/Category/Discrete.hs";
-    file += "xhb/xhb-0.5.2012.3.26/Graphics/XHB/Connection/Auth.hs";
+    //file += "xhb/xhb-0.5.2012.3.26/Graphics/XHB/Connection/Auth.hs";
+   // file += "CV/CV-0.3.5.3/examples/Fuse.hs";
+   // file += "graphviz/graphviz-2999.13.0.2/Data/GraphViz/Attributes/Colors/SVG.hs";
+    //file += "type-int/type-int-0.5.0.2/Data/Type/Boolean.hs";
+    //file += "uuagc-bootstrap/uuagc-bootstrap-0.9.40.2/src-derived/Desugar.hs";
+    file += "xhb/"
+        + "xhb-0.5.2012.3.26/patched/Graphics/XHB/Gen/DPMS/Types.hs";
     
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -281,6 +287,8 @@ public class TestFile extends TestCase {
       result.otherExceptions.t1 = "input is null";
       return null;
     }
+   
+    input = input.replace("          ", " ");
 
     result.linesOfCode.t1 = input.split("\n").length;
     result.byteSize.t1 = input.getBytes().length;

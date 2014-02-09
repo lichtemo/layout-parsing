@@ -4,7 +4,7 @@ exports
   context-free syntax
     Context? Con RecordFields -> Constr {cons("RecordConstr")}
     "{" Fielddecls "}" -> RecordFields {ignore-indent}
-    {Fielddecl ","}+ 			    -> Fielddecls
+    {Fielddecl ","}* 			    -> Fielddecls
     Vars ProportionOp Stype  			    -> Fielddecl {ast("Fielddecl(<1>,<3>)")}
     CType 				    -> Stype
     "!" CType 				    -> Stype
