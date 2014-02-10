@@ -175,8 +175,7 @@ public class TestFile extends TestCase {
    // file += "graphviz/graphviz-2999.13.0.2/Data/GraphViz/Attributes/Colors/SVG.hs";
     //file += "type-int/type-int-0.5.0.2/Data/Type/Boolean.hs";
     //file += "uuagc-bootstrap/uuagc-bootstrap-0.9.40.2/src-derived/Desugar.hs";
-    file += "xhb/"
-        + "xhb-0.5.2012.3.26/patched/Graphics/XHB/Gen/DPMS/Types.hs";
+    file += "BNFC-meta/BNFC-meta-0.3.0.2/Language/LBNF.hs";
     
     testFile(new File(file), file, "main");
     // testFile(new File(file), file, "main");
@@ -287,8 +286,7 @@ public class TestFile extends TestCase {
       result.otherExceptions.t1 = "input is null";
       return null;
     }
-   
-    input = input.replace("          ", " ");
+  
 
     result.linesOfCode.t1 = input.split("\n").length;
     result.byteSize.t1 = input.getBytes().length;

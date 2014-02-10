@@ -17,7 +17,7 @@ rules
   
   compare : ([x|xs],[y|ys]) -> <conc> (head-diff, <compare> (xs, ys))
     where <compare> (x, y) => head-diff
-  compare : (c#(xs), c#(ys)) -> <compare> (xs, ys)
+  compare : (c#(xs), c#(ys)) -> <compare> (xs, ys) where <not(?[])> c
   
   compare : (x, y) -> [(x, y)]
  
