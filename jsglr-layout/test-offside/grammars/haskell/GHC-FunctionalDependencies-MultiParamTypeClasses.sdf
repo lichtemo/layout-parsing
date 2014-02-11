@@ -7,4 +7,4 @@ exports
 	
 	context-free syntax
 		%% Combining FunctionalDependencies and MultiParamTypeClasses
-		"class" SContext? Tycls ClassParameter FunctionalDependencies MaybeWhere 		-> Topdecl {cons("Class")}
+		"class" SContext? Tycls ClassParameter FunctionalDependencies Fds? MaybeWhere 		-> Topdecl {cons("Class")}
