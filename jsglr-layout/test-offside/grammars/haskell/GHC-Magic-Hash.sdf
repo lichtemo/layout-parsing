@@ -15,11 +15,8 @@ exports
     VARID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
     CONID -/- [\35] . ( ( [\0-\6] | ( ( [\8-\40] | [\42-\127] ) ) ) )
 
-  syntax
-    
-
   context-free syntax
-    
+    "(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
 
   lexical syntax
     Decimal                                      -> INTEGER-HASH  

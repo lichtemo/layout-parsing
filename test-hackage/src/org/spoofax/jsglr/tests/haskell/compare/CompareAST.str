@@ -70,6 +70,8 @@ rules
   compare-term: (TypeInfOp(t1, op1, p1), TypePrOp(op2,[t2,p2])) -> <map(compare);concat>[(t1,t2),(op1,op2), (p1,p2)]
   compare-term: (TypePrOp(op2,[t2,p2]), TypeInfOp(t1, op1, p1)) -> <map(compare);concat>[(t1,t2),(op1,op2), (p1,p2)]
   
+  compare-term: (SpliceExp(VarSplice(Var(q1))),Var(q2)) -> <compare> (q1, q2)
+  
   // Nested Function LHS
   // Normalize FunLHS: Remove OpFunLHS and unnest NestedFunLHS
   normalize-funls: OpFunLHS(p1,o,p2) -> VarFunLHS(o, [p1,p2])
@@ -405,7 +407,9 @@ signature
 	TypePrOp			: Op * List(AType) -> Type
 	TypeInfOp			: AType * Op * AType -> Type
 	
-	QuasiQuote: VARID * QuasiQuoteString -> QuasiQuote
+	QuasiQuote	: Exp * QuasiQuoteString -> QuasiQuote
+	VarSplice	: VarSpliceID	 -> Splice
+	SpliceExp	: Splice 		 -> Exp
 
 
 signature

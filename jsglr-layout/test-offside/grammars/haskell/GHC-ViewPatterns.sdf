@@ -6,8 +6,8 @@ imports
 exports
 	context-free syntax
 		%%FunLHS ViewPattern "=" Exp MaybeWhere 	-> Valdef {cons("ViewPatternValdef"), longest-match}
-		"(" VPat ")"							-> APat {cons("ViewPattern")}
+		%%"(" VPat ")"							-> APat {cons("ViewPattern")}
 				
-		Exp RightArrowOp Pat 	-> VPat {ast("View(<1>,<3>)")}
+		Exp RightArrowOp Pat 	-> Pat {ast("ViewPattern(<1>,<3>)")}
 
 		

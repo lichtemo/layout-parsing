@@ -54,7 +54,7 @@ exports
 	syntax
 %%	Quasi Quotation
 	
-		"[" <VARID-LEX> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
+		"[" <Exp-CF> "|" <QuasiQuoteString-LEX> "|]" -> <QuasiQuote-CF> {cons("QuasiQuote"), ignore-layout}
 	
 	context-free syntax
 		QuasiQuote 		-> Exp

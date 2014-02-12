@@ -13,12 +13,9 @@ exports
     VARID -/- [\#] . ~[\)]
   	CONID -/- [\#] . ~[\)]
   	
-  syntax
-  %%	<"("-LEX> <LAYOUT?-CF> <Exp-CF> <"#"-LEX> <")"-LEX> -> <Exp-CF> {reject}
-
-	context-free syntax
+  context-free syntax
 	%% "#" -> Qop {reject}
-	%%"(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
+	"(" Exp Qop ")" -> Exp {cons("LSection"), avoid}
 
   lexical syntax
     Decimal              -> INTEGER-HASH
