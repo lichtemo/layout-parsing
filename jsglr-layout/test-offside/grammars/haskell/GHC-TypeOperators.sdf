@@ -11,10 +11,10 @@ exports
 	
 	context-free priorities
 		
-	   "(" (Op|Qop) ")" AType* -> Type {cons("TypePrOp"), longest-match}
+	   "(" (Qop) ")" AType* -> Type {cons("TypePrOp"), longest-match}
 	   > Type Type 	   	   -> Type
 	
 	context-free priorities
-		AType (Op|Qop) Type -> Type {cons("TypeInfOp"), right}	
+		AType (Qop) Type -> Type {cons("TypeInfOp"), right}	
 	>	Type Type 	-> Type 
 	

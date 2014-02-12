@@ -1,12 +1,15 @@
 module GHC-ExplicitForAll
 
 imports Haskell-Syntax
+imports GHC-KindSignature
 
 exports
 
 	context-free syntax
-		ForallKeyword Var+ "."		-> Forall {ast("Forall(<2>)")}
-		Forall CType -> CType {cons("ExplicitForAll")}
+		Var 								-> ForallParam 
+		"(" Var KindSig ")" 				-> ForallParam {cons("KindedParam")}
+		ForallKeyword ForallParam+ "."		-> Forall {ast("Forall(<2>)")}
+		Forall CType 						-> CType {cons("ExplicitForAll")}
 
 	lexical syntax
 		"forall"		-> AsciiForallKeyword
