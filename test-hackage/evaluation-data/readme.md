@@ -1,3 +1,9 @@
+Februar 27, 2014
+------------
+The folder "2014-02-17_haskellextensions_unicode" contains the data of three meassurements with commit 17b9224a249b34b15e06e81dd83c0428fb3244cd.
+The folder "2014-02-18_reference_old_paper" contains the date of three meassurements with commit e7302297e4086e01cb1905d5d2de0845365e1427.
+All tests were executed on the same computer, so times are compareable.
+
 May 31, 2012
 ------------
 The file "all1338447943348.csv" contains the raw data of evaluating our
