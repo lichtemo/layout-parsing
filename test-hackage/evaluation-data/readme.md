@@ -1,7 +1,11 @@
+March 01, 2014
+------------
+The folder "2014-03-01_haskellextensions_unicode_compiled_constraints" contains again data of three meassurements the commit 17b9224a249b34b15e06e81dd83c0428fb3244cd but using a jsglr version with unicode and compiled contraints at a025a7482d8bf8c4db7b8dc61918a2dcb91749ca.
+
 Februar 27, 2014
 ------------
-The folder "2014-02-17_haskellextensions_unicode" contains the data of three meassurements with commit 17b9224a249b34b15e06e81dd83c0428fb3244cd.
-The folder "2014-02-18_reference_old_paper" contains the date of three meassurements with commit e7302297e4086e01cb1905d5d2de0845365e1427.
+The folder "2014-02-17_haskellextensions_unicode" contains the data of three meassurements with commit 17b9224a249b34b15e06e81dd83c0428fb3244cd using jsglr at commit 78f47472fbfbec366c56954aed67fcd09c86994a.
+The folder "2014-02-18_reference_old_paper" contains the date of three meassurements with commit e7302297e4086e01cb1905d5d2de0845365e1427 using the jsglr implementations in this repo.
 All tests were executed on the same computer, so times are compareable.
 
 May 31, 2012
